@@ -5,9 +5,13 @@ class Attractor {
     this.pos = createVector(x,y);
     this.mass = m;
     this.r = sqrt(this.mass)*2;
+    this.canAttract = true;
   }
   
   attract(mover) {
+    if (!this.canAttract){
+        return;
+    }
     let force = p5.Vector.sub(this.pos, mover.pos);
     let distanceSq = constrain(force.magSq(), 100, 1000);
     let G = 5;

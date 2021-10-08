@@ -17,4 +17,6 @@ function draw() {
 
     att.show()
     player.show()
+
+    att.pos = createVector(mouseX, mouseY);
 }

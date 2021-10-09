@@ -5,6 +5,7 @@ class Attractor {
     this.r = sqrt(abs(this.mass))*2;
     this.canAttract = true;
     this.type = 0;
+    this.angle = 0;
   }
   
   attract(mover) {
@@ -20,14 +21,21 @@ class Attractor {
   }
   
   show() {
+    if (!paused) {
+        this.angle += 0.01;
+    }
     // noStroke();
     // fill(0, 0, 0);
     // ellipse(this.pos.x, this.pos.y, this.r*2);   
     // Black hole
     if (this.type == 0) {
-        const k = 3;
-        smallBH.resize(this.r * k, this.r * k);
-        image(smallBH, this.pos.x - this.r * k / 2, this.pos.y - this.r * k / 2);
+      const k = 7;
+      push();
+      translate(this.pos.x, this.pos.y);
+      rotate(this.angle);
+      smallBH.resize(this.r * k, this.r * k);
+      image(smallBH, -this.r * k / 2, -this.r * k / 2);
+      pop();
     } 
   }
 }

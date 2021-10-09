@@ -2,9 +2,11 @@ let att;
 let player;
 let paused = false;
 let smallBH
+let rocket
 
 function preload(){
     smallBH = loadImage("Assets/smolBH.png")
+    rocket = loadImage("Assets/rocket-ship.png")
 }
 
 function initGame() {
@@ -15,8 +17,6 @@ function initGame() {
 
 function updateGame() {
   // Update and draw everything to the screen
-  background(16);
-
   if (!paused) {
     // Only updates and moves the player if not paused
     att.attract(player);

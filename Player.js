@@ -35,11 +35,18 @@ class Player {
   }
 
   show() {
-    stroke(255);
-    strokeWeight(2);
-    fill(255, 100);
-    ellipse(this.pos.x, this.pos.y, this.r * 2);
-    let d1 = this.vel.copy()
-    drawArrow(this.pos, d1.normalize().mult(35), 'blue')
+    push()
+    translate(this.pos.x, this.pos.y);
+    rotate(this.vel.heading()+radians(90))
+    let k = 8;
+    rocket.resize(this.r * k, this.r * k)
+    image(rocket, -this.r * k/2, -this.r * k/2);
+    pop();
+    // stroke(255);
+    // strokeWeight(2);
+    // fill(255, 100);
+    // ellipse(this.pos.x, this.pos.y, this.r * 2);
+    //let d1 = this.vel.copy()
+    //drawArrow(this.pos, d1.normalize().mult(35), 'blue')
   }
 }

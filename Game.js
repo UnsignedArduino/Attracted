@@ -4,10 +4,12 @@ let paused = false;
 let smallBH
 let bigBH;
 let sun;
+let WH;
 let rocket
 
 function preload(){
     smallBH = loadImage("Assets/smolBH.png")
+    WH = loadImage("Assets/smWH.png")
     bigBH = loadImage("Assets/bigBH.png")
     sun = loadImage("Assets/SUN.png")
     rocket = loadImage("Assets/rocket-ship.png")

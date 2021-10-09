@@ -28,10 +28,11 @@ function keyPressed() {
     }
   }
   // S
+  let m = 3
   if (keyCode == 83) {
     // Get bigger, and wrap around if needed
     att.type ++;
-    if (att.type > 2){
+    if (att.type > m){
         att.type = 0;
     }
   }
@@ -40,7 +41,7 @@ function keyPressed() {
     // Get smaller, and wrap around if needed
     att.type --;
     if (att.type < 0){
-        att.type = 2;
+        att.type = m;
     }
   }
 }

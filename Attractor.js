@@ -1,10 +1,10 @@
 class Attractor {
-  constructor(x,y,m) {
-    this.pos = createVector(x,y);
+  constructor(x, y, m) {
+    this.pos = createVector(x, y);
     this.mass = m;
-    this.r = sqrt(abs(this.mass))*2;
+    this.r = sqrt(abs(this.mass)) * 2;
     this.canAttract = true;
-    this.type = 1;
+    this.type = 0;
     this.angle = 0;
   }
   
@@ -24,11 +24,23 @@ class Attractor {
     if (!paused) {
         this.angle += 0.01;
     }
+
     // noStroke();
     // fill(0, 0, 0);
     // ellipse(this.pos.x, this.pos.y, this.r*2);   
-    // Small
+
+    // Sun
     if (this.type == 0) {
+      this.mass = 30
+      const k = 4;
+      push();
+      translate(this.pos.x, this.pos.y);
+      rotate(this.angle);
+      sun.resize(this.r * k, this.r * k);
+      image(sun, -this.r * k / 2, -this.r * k / 2);
+      pop();
+    // Small black hole
+    } else if (this.type == 1) {
       this.mass = 50
       const k = 7;
       push();
@@ -37,8 +49,8 @@ class Attractor {
       smallBH.resize(this.r * k, this.r * k);
       image(smallBH, -this.r * k / 2, -this.r * k / 2);
       pop();
-    // Big
-    } else if (this.type == 1) {
+    // Big black hole
+    } else if (this.type == 2) {
       this.mass = 200
       const k = 14;
       push();
@@ -47,15 +59,15 @@ class Attractor {
       bigBH.resize(this.r * k, this.r * k);
       image(bigBH, -this.r * k / 2, -this.r * k / 2);
       pop();
-    } //SUN
-    else if (this.type == 2) {
-      this.mass = 30
-      const k = 4;
+    // White hole
+    } else if (this.type == 3) {
+      this.mass = -50
+      const k = 7;
       push();
       translate(this.pos.x, this.pos.y);
       rotate(this.angle);
-      sun.resize(this.r * k, this.r * k);
-      image(sun, -this.r * k / 2, -this.r * k / 2);
+      WH.resize(this.r * k, this.r * k);
+      image(WH, -this.r * k / 2, -this.r * k / 2);
       pop();
     } 
   }

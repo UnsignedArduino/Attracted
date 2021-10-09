@@ -4,7 +4,7 @@ class Attractor {
     this.mass = m;
     this.r = sqrt(abs(this.mass))*2;
     this.canAttract = true;
-    this.type = 0;
+    this.type = 1;
     this.angle = 0;
   }
   
@@ -27,14 +27,35 @@ class Attractor {
     // noStroke();
     // fill(0, 0, 0);
     // ellipse(this.pos.x, this.pos.y, this.r*2);   
-    // Black hole
+    // Small
     if (this.type == 0) {
+      this.mass = 50
       const k = 7;
       push();
       translate(this.pos.x, this.pos.y);
       rotate(this.angle);
       smallBH.resize(this.r * k, this.r * k);
       image(smallBH, -this.r * k / 2, -this.r * k / 2);
+      pop();
+    // Big
+    } else if (this.type == 1) {
+      this.mass = 200
+      const k = 14;
+      push();
+      translate(this.pos.x, this.pos.y);
+      rotate(this.angle);
+      bigBH.resize(this.r * k, this.r * k);
+      image(bigBH, -this.r * k / 2, -this.r * k / 2);
+      pop();
+    } //SUN
+    else if (this.type == 2) {
+      this.mass = 30
+      const k = 4;
+      push();
+      translate(this.pos.x, this.pos.y);
+      rotate(this.angle);
+      sun.resize(this.r * k, this.r * k);
+      image(sun, -this.r * k / 2, -this.r * k / 2);
       pop();
     } 
   }

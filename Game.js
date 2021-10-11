@@ -1,24 +1,55 @@
 let att;
+let att2;
 let player;
 let paused = false;
+let PAN;
+let attractors = [];
+let placeMode = false;
+let moveMode = false;
+let deleteMode = false;
+let selectionMode = false;
+let choosingType = 0;
+let canModify = true
+let showLines = false
+let cameraEasing = 0.1
+let showMap = false
+//Images
 let smallBH
 let bigBH;
 let sun;
+let smallBH2
+let bigBH2;
+let sun2;
 let WH;
+let WH2;
 let rocket
+let chopsic;
+
+let RUN = false
 
 function preload(){
     smallBH = loadImage("Assets/smolBH.png")
     WH = loadImage("Assets/smWH.png")
     bigBH = loadImage("Assets/bigBH.png")
     sun = loadImage("Assets/SUN.png")
+    smallBH2 = loadImage("Assets/smolBH.png")
+    WH2 = loadImage("Assets/smWH.png")
+    bigBH2 = loadImage("Assets/bigBH.png")
+    sun2 = loadImage("Assets/SUN.png")
     rocket = loadImage("Assets/rocket-ship.png")
+    chopsic = loadFont("Assets/Chopsic-K6Dp.ttf")
 }
 
 function initGame() {
   // Make a player and an attractor object
-  player = new Player(300, 300, 5);
-  att = new Attractor(width / 2, height / 2, 50);
+  placeMode = true
+  starBackground.background(0)
+  starBackground = makeBackground();
+  attractors = []
+  choosingType = 0;
+  PAN = createVector(0, 0);
+  player = new Player(width/2, height/2, 5);
+
 }
 
 function drawPauseSymbol() {
@@ -29,31 +60,57 @@ function drawPauseSymbol() {
 }
 
 function updateGame() {
+    
   // Update and draw everything to the screen
-  if (!paused) {
+  if (!paused && RUN) {
     // Only updates and moves the player if not paused
-    att.attract(player);
+    for (let i=0;i<attractors.length;i++){
+      attractors[i].attract(player)
+    }
     player.update();
+    PAN.x += (player.pos.x-width/2-PAN.x)*cameraEasing
+    PAN.y += (player.pos.y-height/2-PAN.y)*cameraEasing
   }
   
-  // Draws everything to screen
-  att.show()
-  player.show()
 
-  // Show red exclaimation mark if less then 50 px away
-  if (dist(att.pos.x, att.pos.y, player.pos.x, player.pos.y) <= 200) {
-    fill(255, 0, 0);
-    textSize(25);
-    text("!", player.pos.x, player.pos.y - 25);
+  // Draws everything to screen
+  for (let i=0;i<attractors.length;i++){
+    attractors[i].show()
   }
+  player.show()
+  if (showMap){
+    displayMap()
+  }
+  if (canModify && placeMode){
+    showMenu()
+  }
+  
+  
 
   // Draw the pause symbol if neccessary
   if (paused) {
     drawPauseSymbol();
   }
+  //Draw move
+  textFont(chopsic)
+  fill(255)
+  if (moveMode){
+    text("Move   Mode", width-120, 50)
+  }
+  if (placeMode){
+    text("Place   Mode", width-120, 50)
+  }
+  if (deleteMode){
+    text("Delete   Mode", width-130, 50)
+  }
+  if (selectionMode){
+    text("Selection   Mode", width-135, 50)
+  }
+  fill(255, 255, 120)
+  textAlign(CENTER)
 
   // Set the position of the attractor to your mouse position
-  att.pos = createVector(mouseX, mouseY);
+  //att.pos = createVector(mouseX, mouseY);
 }
 
 function togglePaused() {

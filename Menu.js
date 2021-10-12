@@ -24,6 +24,7 @@ function showMenu() {
   push();
   
   if (placeMode) {
+    textFont(chopsic);
     if (choosingType == 0) {
       text("Sun", width / 2, 50);
     }

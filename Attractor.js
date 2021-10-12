@@ -106,22 +106,42 @@ class Attractor {
 
     this.currentR = this.r * k;
     this.pos = temp.copy();
-    
-    if (mouseHeld && moveMode) {
-      circle(mouseX + PAN.x, mouseY + PAN.y, 10);
-      if (dist(mouseX + PAN.x, mouseY + PAN.y, this.pos.x, this.pos.y) < this.currentR) {
-        if (!dragging) {
-          dragging = true;
-          this.draggingMe = true;
+    if (!showMap && canModify){
+      if (mouseHeld && moveMode) {
+        circle(mouseX + PAN.x, mouseY + PAN.y, 10);
+        if (dist(mouseX + PAN.x, mouseY + PAN.y, this.pos.x, this.pos.y) < this.currentR) {
+          if (!dragging) {
+            dragging = true;
+            this.draggingMe = true;
+          }
         }
+        if (this.draggingMe) {
+          this.pos.x = mouseX + PAN.x;
+          this.pos.y = mouseY + PAN.y;
+        }
+      } else {
+        this.draggingMe = false;
+        dragging = false;
       }
-      if (this.draggingMe) {
-        this.pos.x = mouseX + PAN.x;
-        this.pos.y = mouseY + PAN.y;
-      }
-    } else {
-      this.draggingMe = false;
-      dragging = false;
     }
+    else if (canModify){
+      if (mouseHeld && moveMode) {
+        circle(mouseX + PAN.x, mouseY + PAN.y, 10);
+        if (dist(mouseX, mouseY, this.pos.x/scale, this.pos.y/scale) < this.currentR) {
+          if (!dragging) {
+            dragging = true;
+            this.draggingMe = true;
+          }
+        }
+        if (this.draggingMe) {
+          this.pos.x = mouseX*scale;
+          this.pos.y = mouseY*scale;
+        }
+      } else {
+        this.draggingMe = false;
+        dragging = false;
+      }
+    }
+    
   }
 }

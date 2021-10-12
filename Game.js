@@ -24,6 +24,8 @@ let placeButton;
 let selectButton;
 let moveButton;
 let deleteButton;
+let mapButton;
+
 let launchVel
 
 // Images
@@ -71,14 +73,15 @@ function initGame() {
   runButton = new Clickable();
   runButton.locate(10, 10);
   runButton.resize(100, 30);
-  runButton.text = "Run";
+  runButton.text = "Run (Enter)";
   runButton.onPress = function() {
     RUN = !RUN;
     canModify = !RUN;
     if (RUN) {
-      runButton.text = "Stop";
+      runButton.text = "Stop (Enter)";
     } else {
-      runButton.text = "Run";
+      initGame()
+      runButton.text = "Run (Enter)";
     }
   }
   canModify = true;
@@ -86,20 +89,15 @@ function initGame() {
   pauseButton = new Clickable();
   pauseButton.locate(10, 50);
   pauseButton.resize(100, 30);
-  pauseButton.text = "Pause";
+  pauseButton.text = "Pause (Space)";
   pauseButton.onPress = function() {
     paused = !paused;
-    if (paused) {
-      pauseButton.text = "Resume";
-    } else {
-      pauseButton.text = "Pause";
-    }
   }
 
   placeButton = new Clickable();
   placeButton.locate(120, 10);
   placeButton.resize(100, 30);
-  placeButton.text = "Place mode";
+  placeButton.text = "Place mode (1)";
   placeButton.onPress = function() {
     placeMode = true;
     moveMode = false;
@@ -110,7 +108,7 @@ function initGame() {
   moveButton = new Clickable();
   moveButton.locate(230, 10);
   moveButton.resize(110, 30);
-  moveButton.text = "Move mode";
+  moveButton.text = "Move mode (2)";
   moveButton.onPress = function() {
     placeMode = false;
     moveMode = true;
@@ -121,7 +119,7 @@ function initGame() {
   deleteButton = new Clickable();
   deleteButton.locate(350, 10);
   deleteButton.resize(110, 30);
-  deleteButton.text = "Delete mode";
+  deleteButton.text = "Delete mode (3)";
   deleteButton.onPress = function() {
     placeMode = false;
     moveMode = false;
@@ -132,7 +130,7 @@ function initGame() {
   selectButton = new Clickable();
   selectButton.locate(470, 10);
   selectButton.resize(110, 30);
-  selectButton.text = "Select mode";
+  selectButton.text = "Select mode (4)";
   selectButton.onPress = function() {
     placeMode = false;
     moveMode = false;
@@ -140,7 +138,15 @@ function initGame() {
     selectionMode = true;
   }
 
-  player.vel = launchVel
+  mapButton = new Clickable();
+  mapButton.locate(590, 10);
+  mapButton.resize(110, 30);
+  mapButton.text = "Open map (m)";
+  mapButton.onPress = function() {
+    showMap = !showMap;
+  }
+
+  player.vel = launchVel.copy()
 }
 
 function updateGame() {
@@ -166,12 +172,14 @@ function updateGame() {
     pauseButton.draw();
   }
 
+  pauseButton.text = paused ? "Resume (Space)" : "Pause (Space)";
   if (canModify) {
     // Draw and highlight the buttons
     placeButton.draw();
     moveButton.draw();
     deleteButton.draw();
     selectButton.draw();
+    mapButton.draw()
     placeButton.color = unselectedButtonColor;
     moveButton.color = unselectedButtonColor;
     deleteButton.color = unselectedButtonColor;
@@ -185,6 +193,8 @@ function updateGame() {
     } else if (selectionMode) {
       selectButton.color = selectedButtonColor;
     }
+    mapButton.color = showMap ? selectedButtonColor : unselectedButtonColor;
+    mapButton.text = showMap ? "Close map (m)" : "Open map (m)";
   }
 
   player.show();

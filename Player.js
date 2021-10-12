@@ -56,7 +56,7 @@ class Player {
       fill(255, 100);
       ellipse(this.pos.x, this.pos.y, this.r * 2);
       let d1 = this.vel.copy()
-      drawArrow(this.pos, d1.normalize().mult(35), 'blue')
+      drawArrow(this.pos, d1.mult(15), 'blue')
       pop()
     }
   }

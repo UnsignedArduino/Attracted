@@ -3,6 +3,7 @@ const height = 720;
 const fps = 60;
 let mouseHeld = false;
 let dragging = false;
+let fpsToShow;
 
 function setup() {
   createCanvas(width, height);
@@ -11,6 +12,9 @@ function setup() {
   frameRate(fps);
   initGame();
   // noCursor();
+  setInterval(() => {
+    fpsToShow = round(frameRate());
+  }, 1000);
 }
 
 function draw() {
@@ -18,7 +22,13 @@ function draw() {
   drawBackground();
   image(starBackground, 0, 0);
   updateGame();
-  
+
+  // Write FPS to screen
+  push();
+  textAlign(RIGHT);
+  fill(255);
+  text("FPS: " + fpsToShow, width - 10, 10);
+  pop();
 }
 
 function keyPressed() {
@@ -31,7 +41,17 @@ function keyPressed() {
       cursor();
     } 
   }
-
+  // Enter
+  if (keyCode == 13) {
+    RUN = !RUN;
+    canModify = !RUN;
+    if (RUN) {
+      runButton.text = "Stop (Enter)";
+    } else {
+      initGame()
+      runButton.text = "Run (Enter)";
+    }
+  }
   // L
   if (keyCode == 76) {
     showLines = !showLines;
@@ -49,10 +69,10 @@ function keyPressed() {
     selectionMode = false;
     // 1
     if (keyCode == 49) {
-      moveMode = true;
+      placeMode = true;
     // 2
     } else if (keyCode == 50) {
-      placeMode = true;
+      moveMode = true;
     // 3
     } else if (keyCode == 51) {
       deleteMode = true;
@@ -79,7 +99,7 @@ function mouseReleased() {
 
 function mouseClicked() {
   if (mouseY < runButton.y + runButton.height && 
-      mouseX < selectButton.x + selectButton.width) {
+      mouseX < mapButton.x + mapButton.width) {
     return;
   }
   
@@ -124,7 +144,7 @@ function mouseClicked() {
     }
     else if (deleteMode && showMap) {
       for (index in attractors) {
-        if (dist(attractors[index].pos.x/scale, attractors[index].pos.y/scale, mouseX, mouseY) < attractors[index].currentR) {
+        if (dist(attractors[index].pos.x / scale, attractors[index].pos.y / scale, mouseX, mouseY) < attractors[index].currentR) {
           attractors.splice(index, 1);
         }
       }

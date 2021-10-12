@@ -17,16 +17,7 @@ let showLines = false;
 let cameraEasing = 0.1;
 let showMap = false;
 
-// Buttons
-let runButton;
-let pauseButton;
-let placeButton;
-let selectButton;
-let moveButton;
-let deleteButton;
-let mapButton;
-
-let launchVel
+let launchVel;
 
 // Images
 let smallBH;
@@ -69,84 +60,9 @@ function initGame() {
   moveMode = false;
   deleteMode = false;
   selectionMode = false;
-
-  runButton = new Clickable();
-  runButton.locate(10, 10);
-  runButton.resize(100, 30);
-  runButton.text = "Run (Enter)";
-  runButton.onPress = function () {
-    RUN = !RUN;
-    canModify = !RUN;
-    if (RUN) {
-      runButton.text = "Stop (Enter)";
-    } else {
-      initGame()
-      runButton.text = "Run (Enter)";
-    }
-  }
-  canModify = true;
-
-  pauseButton = new Clickable();
-  pauseButton.locate(10, 50);
-  pauseButton.resize(100, 30);
-  pauseButton.text = "Pause (Space)";
-  pauseButton.onPress = function () {
-    paused = !paused;
-  }
-
-  placeButton = new Clickable();
-  placeButton.locate(120, 10);
-  placeButton.resize(100, 30);
-  placeButton.text = "Place mode (1)";
-  placeButton.onPress = function () {
-    placeMode = true;
-    moveMode = false;
-    deleteMode = false;
-    selectionMode = false;
-  }
-
-  moveButton = new Clickable();
-  moveButton.locate(230, 10);
-  moveButton.resize(110, 30);
-  moveButton.text = "Move mode (2)";
-  moveButton.onPress = function () {
-    placeMode = false;
-    moveMode = true;
-    deleteMode = false;
-    selectionMode = false;
-  }
-
-  deleteButton = new Clickable();
-  deleteButton.locate(350, 10);
-  deleteButton.resize(110, 30);
-  deleteButton.text = "Delete mode (3)";
-  deleteButton.onPress = function () {
-    placeMode = false;
-    moveMode = false;
-    deleteMode = true;
-    selectionMode = false;
-  }
-
-  selectButton = new Clickable();
-  selectButton.locate(470, 10);
-  selectButton.resize(110, 30);
-  selectButton.text = "Select mode (4)";
-  selectButton.onPress = function () {
-    placeMode = false;
-    moveMode = false;
-    deleteMode = false;
-    selectionMode = true;
-  }
-
-  mapButton = new Clickable();
-  mapButton.locate(590, 10);
-  mapButton.resize(110, 30);
-  mapButton.text = "Open map (m)";
-  mapButton.onPress = function () {
-    showMap = !showMap;
-  }
-
-  player.vel = launchVel.copy()
+  makeButtons();
+  textSize(12);
+  player.vel = launchVel.copy();
 }
 
 function updateGame() {
@@ -166,44 +82,12 @@ function updateGame() {
     attractors[i].show();
   }
 
-  runButton.draw();
-
-  if (RUN) {
-    pauseButton.draw();
-  }
-
-  pauseButton.text = paused ? "Resume (Space)" : "Pause (Space)";
-  if (canModify) {
-    // Draw and highlight the buttons
-    placeButton.draw();
-    moveButton.draw();
-    deleteButton.draw();
-    selectButton.draw();
-    mapButton.draw()
-    placeButton.color = unselectedButtonColor;
-    moveButton.color = unselectedButtonColor;
-    deleteButton.color = unselectedButtonColor;
-    selectButton.color = unselectedButtonColor;
-    if (placeMode) {
-      placeButton.color = selectedButtonColor;
-    } else if (moveMode) {
-      moveButton.color = selectedButtonColor;
-    } else if (deleteMode) {
-      deleteButton.color = selectedButtonColor;
-    } else if (selectionMode) {
-      selectButton.color = selectedButtonColor;
-    }
-    mapButton.color = showMap ? selectedButtonColor : unselectedButtonColor;
-    mapButton.text = showMap ? "Close map (m)" : "Open map (m)";
-  }
+  drawButtons();
 
   player.show();
 
   if (showMap) {
     displayMap();
-  }
-  if (canModify && placeMode) {
-    showMenu();
   }
 
   // Set the position of the attractor to your mouse position

@@ -1,6 +1,7 @@
 const width = 1280;
 const height = 720;
 const fps = 60;
+
 let mouseHeld = false;
 let dragging = false;
 let fpsToShow;
@@ -24,6 +25,7 @@ function draw() {
   updateGame();
 
   // Write FPS to screen
+  textSize(12)
   push();
   textAlign(RIGHT);
   fill(255);
@@ -42,7 +44,7 @@ function draw() {
   push();
   textAlign(RIGHT);
   fill(255);
-  text("Rocket speed: (" + round(player.vel.x) + ", " + round(player.vel.y) + ") px/sec",
+  text("Rocket speed: (" + round(player.vel.x) + ", " + round(player.vel.y) + ") px/frame",
     width - 10, 50);
   pop();
 }
@@ -79,21 +81,30 @@ function keyPressed() {
   }
 
   if (canModify) {
-    moveMode = false;
-    placeMode = false;
-    deleteMode = false;
-    selectionMode = false;
+    
     // 1
     if (keyCode == 49) {
+      moveMode = false;
+      deleteMode = false;
+      selectionMode = false;
       placeMode = true;
       // 2
     } else if (keyCode == 50) {
+      placeMode = false;
+      deleteMode = false;
+      selectionMode = false;
       moveMode = true;
       // 3
     } else if (keyCode == 51) {
+      moveMode = false;
+      placeMode = false;
+      selectionMode = false;
       deleteMode = true;
       // 4
     } else if (keyCode == 52) {
+      moveMode = false;
+      placeMode = false;
+      deleteMode = false;
       selectionMode = true;
     }
   }
@@ -123,8 +134,7 @@ function mouseClicked() {
     let p = player.pos.copy();
     let m = createVector(mouseX, mouseY);
     launchVel = p5.Vector.sub(m, p);
-    launchVel.x /= 100;
-    launchVel.y /= 100;
+    launchVel.setMag(6)
     player.vel = launchVel.copy()
   }
 
@@ -138,16 +148,16 @@ function mouseClicked() {
     } else if (placeMode) {
       let gap = width / 4;
       if (mouseX < gap) {
-        choosingType = 0;
+        //choosingType = 0;
       }
       if (mouseX > gap && mouseX < gap * 2) {
-        choosingType = 3;
+        //choosingType = 3;
       }
       if (mouseX > gap * 2 && mouseX < gap * 3) {
-        choosingType = 1;
+        //choosingType = 1;
       }
       if (mouseX > gap * 3) {
-        choosingType = 2;
+        //choosingType = 2;
       }
     }
 

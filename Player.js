@@ -32,8 +32,8 @@ class Player {
     this.vel.add(this.acc);
     this.pos.add(this.vel);
     this.acc.set(0, 0);
-    if (this.pos.x > width || this.pos.x < 0 || this.pos.y > height || this.pos.y < 0){
-      //initGame()
+    if (this.pos.x > width*10 || this.pos.x < -width || this.pos.y > height*10 || this.pos.y < -height){
+      initGame()
     }
   }
 

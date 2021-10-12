@@ -7,42 +7,43 @@ class Attractor {
     this.type = t;
     this.angle = 0;
     this.currentR = this.r;
-    this.draggingMe = false
+    this.draggingMe = false;
   }
   
   attract(mover) {
-    let drawPos = this.pos.copy()
-    drawPos.sub(PAN)
-    let d = dist(this.pos.x, this.pos.y, mover.pos.x, mover.pos.y)
+    let drawPos = this.pos.copy();
+    drawPos.sub(PAN);
+    let d = dist(this.pos.x, this.pos.y, mover.pos.x, mover.pos.y);
     
     if (d <= 200) {
-      push()
+      push();
       fill(255, 0, 0);
       textSize(25);
-      text("!", mover.pos.x-PAN.x, mover.pos.y - 25-PAN.y);
-      pop()
+      text("!", mover.pos.x - PAN.x, mover.pos.y - 25 - PAN.y);
+      pop();
     }
-    if (d < this.currentR/2){
-      initGame()
-      return
+
+    if (d < this.currentR / 2) {
+      initGame();
+      return;
     }
+
     if (!this.canAttract) {
       return;
     }
+
     let force = p5.Vector.sub(this.pos, mover.pos);
     let distanceSq = force.magSq();
     let G = 55;
     let strength = G * (this.mass * mover.mass) / distanceSq;
     force.setMag(strength);
-    if (1==1){
-      mover.applyForce(force);
-    }
+    mover.applyForce(force);
     
-    if (showLines && d < (width+height)){
-      push()
-      stroke(255)
-      strokeWeight(strength*10)
-      line(drawPos.x, drawPos.y, mover.pos.x-PAN.x, mover.pos.y-PAN.y)
+    if (showLines && d < (width + height)) {
+      push();
+      stroke(255);
+      strokeWeight(strength * 10);
+      line(drawPos.x, drawPos.y, mover.pos.x - PAN.x, mover.pos.y - PAN.y);
       pop(); 
     }
   }
@@ -51,10 +52,7 @@ class Attractor {
     let temp = this.pos.copy();
     this.pos.sub(PAN);
     let t = this.pos.copy();
-
-    
-
-    
+   
     if (!paused) {
         this.angle += 0.01;
     }
@@ -64,11 +62,10 @@ class Attractor {
     // ellipse(this.pos.x, this.pos.y, this.r*2);   
 
     // Sun
-    let k
+    let k;
     if (this.type == 0) {
-      this.mass = 30
+      this.mass = 30;
       k = 4;
-      
       push();
       translate(this.pos.x, this.pos.y);
       rotate(this.angle);
@@ -106,24 +103,25 @@ class Attractor {
       image(WH, -this.r * k / 2, -this.r * k / 2);
       pop();
     }
-    this.currentR = this.r*k 
-    this.pos = temp.copy()
+
+    this.currentR = this.r * k;
+    this.pos = temp.copy();
     
     if (mouseHeld && moveMode) {
       circle(mouseX + PAN.x, mouseY + PAN.y, 10);
       if (dist(mouseX + PAN.x, mouseY + PAN.y, this.pos.x, this.pos.y) < this.currentR) {
-          if (!dragging) {
-              dragging = true;
-              this.draggingMe = true;
-          }
+        if (!dragging) {
+          dragging = true;
+          this.draggingMe = true;
+        }
       }
       if (this.draggingMe) {
-          this.pos.x = mouseX + PAN.x;
-          this.pos.y = mouseY + PAN.y;
+        this.pos.x = mouseX + PAN.x;
+        this.pos.y = mouseY + PAN.y;
       }
     } else {
-        this.draggingMe = false;
-        dragging = false
+      this.draggingMe = false;
+      dragging = false;
     }
   }
 }

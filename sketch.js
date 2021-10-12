@@ -6,10 +6,11 @@ let dragging = false;
 
 function setup() {
   createCanvas(width, height);
+  launchVel = createVector()
   starBackground = makeBackground();
   frameRate(fps);
   initGame();
-  //noCursor();
+  // noCursor();
 }
 
 function draw() {
@@ -22,59 +23,45 @@ function draw() {
 
 function keyPressed() {
   // Space
-  if (keyCode == 32) {
+  if (RUN && keyCode == 32) {
     togglePaused();
     if (!paused) {
-      //noCursor();
+      // noCursor();
     } else {
       cursor();
-    }
-  }
-  // L
-  if (keyCode == 76) {
-    showLines = !showLines
-  }
-  //m
-  if (keyCode == 77){
-    showMap = !showMap
+    } 
   }
 
-  // // A
-  // if (keyCode == 65) {
-  //   // Get smaller, and wrap around if needed
-  //   att.type --;
-  //   if (att.type < 0){
-  //       att.type = m;
-  //   }
-  // }
-  //Numbers
-  if (canModify){
-    if (keyCode == 49){
+  // L
+  if (keyCode == 76) {
+    showLines = !showLines;
+  }
+
+  // M
+  if (keyCode == 77) {
+    showMap = !showMap;
+  }
+  
+  if (canModify) {
+    moveMode = false;
+    placeMode = false;
+    deleteMode = false;
+    selectionMode = false;
+    // 1
+    if (keyCode == 49) {
       moveMode = true;
-      placeMode = false;
-      deleteMode = false
-      selectionMode = false
-    }
-    if (keyCode == 50){
-      moveMode = false;
+    // 2
+    } else if (keyCode == 50) {
       placeMode = true;
-      deleteMode = false
-      selectionMode = false
-    }
-    if (keyCode == 51){
-      moveMode = false;
-      placeMode = false;
-      deleteMode = true
-      selectionMode = false
-    }
-    if (keyCode == 52){
-      moveMode = false;
-      placeMode = false;
-      deleteMode = false
-      selectionMode = true
+    // 3
+    } else if (keyCode == 51) {
+      deleteMode = true;
+    // 4
+    } else if (keyCode == 52) {
+      selectionMode = true;
     }
   }
-  // if (keyCode == 52){
+  // if (keyCode == 52) {
   //   moveMode = false;
   //   placeMode = false;
   //   deleteMode = false
@@ -82,51 +69,63 @@ function keyPressed() {
   // }
 }
 
-
-function mousePressed(){
+function mousePressed() {
     mouseHeld = true;
 }
-function mouseReleased(){
+
+function mouseReleased() {
     mouseHeld = false;
 }
-function mouseClicked(){
-  if (selectionMode && !RUN){
-    let p = player.pos.copy()
-    let m = createVector(mouseX, mouseY)
 
-    player.vel = p5.Vector.sub(m, p)
-    player.vel.x /= 100
-    player.vel.y /= 100
+function mouseClicked() {
+  if (mouseY < runButton.y + runButton.height && 
+      mouseX < selectButton.x + selectButton.width) {
+    return;
   }
-  if (canModify){
-    if (placeMode && mouseY < height-100){
-      if (!showMap){
-        attractors.push(new Attractor(mouseX+PAN.x, mouseY+PAN.y, choosingType))
+  
+  if (selectionMode && !RUN) {
+    let p = player.pos.copy();
+    let m = createVector(mouseX, mouseY);
+    launchVel = p5.Vector.sub(m, p);
+    launchVel.x /= 100;
+    launchVel.y /= 100;
+    player.vel =launchVel.copy()
+  }
+
+  if (canModify) {
+    if (placeMode && mouseY < height - 100) {
+      if (!showMap) {
+        attractors.push(new Attractor(mouseX + PAN.x, mouseY + PAN.y, choosingType));
+      } else {
+        attractors.push(new Attractor(mouseX * scale, mouseY * scale, choosingType));
       }
-      else{
-        attractors.push(new Attractor(mouseX*scale, mouseY*scale, choosingType))
-      }
-      
-    }
-    else if (placeMode){
-      let gap = width/4
-      if (mouseX < gap){
+    } else if (placeMode) {
+      let gap = width / 4;
+      if (mouseX < gap) {
         choosingType = 0;
       }
-      if (mouseX > gap && mouseX < gap*2){
+      if (mouseX > gap && mouseX < gap * 2) {
         choosingType = 3;
       }
-      if (mouseX > gap*2 && mouseX < gap*3){
+      if (mouseX > gap * 2 && mouseX < gap * 3) {
         choosingType = 1;
       }
-      if (mouseX > gap*3){
+      if (mouseX > gap * 3) {
         choosingType = 2;
       }
     }
-    if (deleteMode){
-      for (index in attractors){
-        if (dist(attractors[index].pos.x, attractors[index].pos.y, mouseX, mouseY) < attractors[index].currentR){
-          attractors.splice(index, 1)
+
+    if (deleteMode && !showMap) {
+      for (index in attractors) {
+        if (dist(attractors[index].pos.x, attractors[index].pos.y, mouseX, mouseY) < attractors[index].currentR) {
+          attractors.splice(index, 1);
+        }
+      }
+    }
+    else if (deleteMode && showMap) {
+      for (index in attractors) {
+        if (dist(attractors[index].pos.x/scale, attractors[index].pos.y/scale, mouseX, mouseY) < attractors[index].currentR) {
+          attractors.splice(index, 1);
         }
       }
     }

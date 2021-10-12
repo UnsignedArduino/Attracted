@@ -9,12 +9,12 @@ class Attractor {
     this.currentR = this.r;
     this.draggingMe = false;
   }
-  
+
   attract(mover) {
     let drawPos = this.pos.copy();
     drawPos.sub(PAN);
     let d = dist(this.pos.x, this.pos.y, mover.pos.x, mover.pos.y);
-    
+
     if (d <= 200) {
       push();
       fill(255, 0, 0);
@@ -38,23 +38,23 @@ class Attractor {
     let strength = G * (this.mass * mover.mass) / distanceSq;
     force.setMag(strength);
     mover.applyForce(force);
-    
+
     if (showLines && d < (width + height)) {
       push();
       stroke(255);
       strokeWeight(strength * 10);
       line(drawPos.x, drawPos.y, mover.pos.x - PAN.x, mover.pos.y - PAN.y);
-      pop(); 
+      pop();
     }
   }
-  
+
   show() {
     let temp = this.pos.copy();
     this.pos.sub(PAN);
     let t = this.pos.copy();
-   
+
     if (!paused) {
-        this.angle += 0.01;
+      this.angle += 0.01;
     }
 
     // noStroke();
@@ -72,7 +72,7 @@ class Attractor {
       sun.resize(this.r * k, this.r * k);
       image(sun, -this.r * k / 2, -this.r * k / 2);
       pop();
-    // Small black hole
+      // Small black hole
     } else if (this.type == 1) {
       this.mass = 50
       k = 7;
@@ -82,7 +82,7 @@ class Attractor {
       smallBH.resize(this.r * k, this.r * k);
       image(smallBH, -this.r * k / 2, -this.r * k / 2);
       pop();
-    // Big black hole
+      // Big black hole
     } else if (this.type == 2) {
       this.mass = 200
       k = 14;
@@ -92,7 +92,7 @@ class Attractor {
       bigBH.resize(this.r * k, this.r * k);
       image(bigBH, -this.r * k / 2, -this.r * k / 2);
       pop();
-    // White hole
+      // White hole
     } else if (this.type == 3) {
       this.mass = -40
       k = 7;
@@ -106,7 +106,7 @@ class Attractor {
 
     this.currentR = this.r * k;
     this.pos = temp.copy();
-    if (!showMap && canModify){
+    if (!showMap && canModify) {
       if (mouseHeld && moveMode) {
         circle(mouseX + PAN.x, mouseY + PAN.y, 10);
         if (dist(mouseX + PAN.x, mouseY + PAN.y, this.pos.x, this.pos.y) < this.currentR) {
@@ -124,24 +124,24 @@ class Attractor {
         dragging = false;
       }
     }
-    else if (canModify){
+    else if (canModify) {
       if (mouseHeld && moveMode) {
         circle(mouseX + PAN.x, mouseY + PAN.y, 10);
-        if (dist(mouseX, mouseY, this.pos.x/scale, this.pos.y/scale) < this.currentR) {
+        if (dist(mouseX, mouseY, this.pos.x / scale, this.pos.y / scale) < this.currentR) {
           if (!dragging) {
             dragging = true;
             this.draggingMe = true;
           }
         }
         if (this.draggingMe) {
-          this.pos.x = mouseX*scale;
-          this.pos.y = mouseY*scale;
+          this.pos.x = mouseX * scale;
+          this.pos.y = mouseY * scale;
         }
       } else {
         this.draggingMe = false;
         dragging = false;
       }
     }
-    
+
   }
 }

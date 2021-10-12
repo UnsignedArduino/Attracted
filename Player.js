@@ -32,7 +32,7 @@ class Player {
     this.vel.add(this.acc);
     this.pos.add(this.vel);
     this.acc.set(0, 0);
-    if (this.pos.x > width*10 || this.pos.x < -width || this.pos.y > height*10 || this.pos.y < -height){
+    if (this.pos.x > width * 10 || this.pos.x < -width || this.pos.y > height * 10 || this.pos.y < -height) {
       initGame()
     }
   }
@@ -44,12 +44,12 @@ class Player {
     // drawPos.y -= PAN.y
     push()
     translate(drawPos.x, drawPos.y);
-    rotate(this.vel.heading()+radians(90))
+    rotate(this.vel.heading() + radians(90))
     let k = 8;
     rocket.resize(this.r * k, this.r * k)
-    image(rocket, -this.r * k/2, -this.r * k/2);
+    image(rocket, -this.r * k / 2, -this.r * k / 2);
     pop();
-    if (!RUN){
+    if (!RUN) {
       push()
       stroke(255);
       strokeWeight(2);

@@ -43,16 +43,16 @@ let chopsic;
 let RUN = false;
 
 function preload() {
-    smallBH = loadImage("Assets/smolBH.png");
-    WH = loadImage("Assets/smWH.png");
-    bigBH = loadImage("Assets/bigBH.png");
-    sun = loadImage("Assets/SUN.png");
-    smallBH2 = loadImage("Assets/smolBH.png");
-    WH2 = loadImage("Assets/smWH.png");
-    bigBH2 = loadImage("Assets/bigBH.png");
-    sun2 = loadImage("Assets/SUN.png");
-    rocket = loadImage("Assets/rocket-ship.png");
-    chopsic = loadFont("Assets/Chopsic-K6Dp.ttf");
+  smallBH = loadImage("Assets/smolBH.png");
+  WH = loadImage("Assets/smWH.png");
+  bigBH = loadImage("Assets/bigBH.png");
+  sun = loadImage("Assets/SUN.png");
+  smallBH2 = loadImage("Assets/smolBH.png");
+  WH2 = loadImage("Assets/smWH.png");
+  bigBH2 = loadImage("Assets/bigBH.png");
+  sun2 = loadImage("Assets/SUN.png");
+  rocket = loadImage("Assets/rocket-ship.png");
+  chopsic = loadFont("Assets/Chopsic-K6Dp.ttf");
 }
 
 function initGame() {
@@ -74,7 +74,7 @@ function initGame() {
   runButton.locate(10, 10);
   runButton.resize(100, 30);
   runButton.text = "Run (Enter)";
-  runButton.onPress = function() {
+  runButton.onPress = function () {
     RUN = !RUN;
     canModify = !RUN;
     if (RUN) {
@@ -90,7 +90,7 @@ function initGame() {
   pauseButton.locate(10, 50);
   pauseButton.resize(100, 30);
   pauseButton.text = "Pause (Space)";
-  pauseButton.onPress = function() {
+  pauseButton.onPress = function () {
     paused = !paused;
   }
 
@@ -98,7 +98,7 @@ function initGame() {
   placeButton.locate(120, 10);
   placeButton.resize(100, 30);
   placeButton.text = "Place mode (1)";
-  placeButton.onPress = function() {
+  placeButton.onPress = function () {
     placeMode = true;
     moveMode = false;
     deleteMode = false;
@@ -109,7 +109,7 @@ function initGame() {
   moveButton.locate(230, 10);
   moveButton.resize(110, 30);
   moveButton.text = "Move mode (2)";
-  moveButton.onPress = function() {
+  moveButton.onPress = function () {
     placeMode = false;
     moveMode = true;
     deleteMode = false;
@@ -120,7 +120,7 @@ function initGame() {
   deleteButton.locate(350, 10);
   deleteButton.resize(110, 30);
   deleteButton.text = "Delete mode (3)";
-  deleteButton.onPress = function() {
+  deleteButton.onPress = function () {
     placeMode = false;
     moveMode = false;
     deleteMode = true;
@@ -131,7 +131,7 @@ function initGame() {
   selectButton.locate(470, 10);
   selectButton.resize(110, 30);
   selectButton.text = "Select mode (4)";
-  selectButton.onPress = function() {
+  selectButton.onPress = function () {
     placeMode = false;
     moveMode = false;
     deleteMode = false;
@@ -142,7 +142,7 @@ function initGame() {
   mapButton.locate(590, 10);
   mapButton.resize(110, 30);
   mapButton.text = "Open map (m)";
-  mapButton.onPress = function() {
+  mapButton.onPress = function () {
     showMap = !showMap;
   }
 
@@ -153,16 +153,16 @@ function updateGame() {
   // Update and draw everything to the screen
   if (!paused && RUN) {
     // Only updates and moves the player if not paused
-    for (let i = 0; i < attractors.length; i ++) {
+    for (let i = 0; i < attractors.length; i++) {
       attractors[i].attract(player);
     }
     player.update();
-    PAN.x += (player.pos.x-width / 2 - PAN.x) * cameraEasing;
-    PAN.y += (player.pos.y-height / 2 - PAN.y) * cameraEasing;
+    PAN.x += (player.pos.x - width / 2 - PAN.x) * cameraEasing;
+    PAN.y += (player.pos.y - height / 2 - PAN.y) * cameraEasing;
   }
-  
+
   // Draws everything to screen
-  for (let i = 0; i < attractors.length; i ++) {
+  for (let i = 0; i < attractors.length; i++) {
     attractors[i].show();
   }
 

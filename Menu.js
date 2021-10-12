@@ -22,7 +22,7 @@ function showMenu() {
   image(bigBH2, gap * 3.3, height - 90);
   pop();
   push();
-  
+
   if (placeMode) {
     textFont(chopsic);
     if (choosingType == 0) {
@@ -38,9 +38,9 @@ function showMenu() {
       text("Big    Black   Hole", width / 2, 50);
     }
   }
-  
+
   pop();
-  
+
   if (mouseY < height - 100) {
     if (!showMap) {
       if (choosingType == 0) {

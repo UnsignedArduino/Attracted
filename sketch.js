@@ -34,16 +34,16 @@ function draw() {
   push();
   textAlign(RIGHT);
   fill(255);
-  text("Rocket position: (" + round(player.pos.x) + ", " + round(player.pos.y) + ")", 
-       width - 10, 30);
+  text("Rocket position: (" + round(player.pos.x) + ", " + round(player.pos.y) + ")",
+    width - 10, 30);
   pop();
 
   // Write velocity to screen
   push();
   textAlign(RIGHT);
   fill(255);
-  text("Rocket speed: (" + round(player.vel.x) + ", " + round(player.vel.y) + ") px/sec", 
-       width - 10, 50);
+  text("Rocket speed: (" + round(player.vel.x) + ", " + round(player.vel.y) + ") px/sec",
+    width - 10, 50);
   pop();
 }
 
@@ -55,7 +55,7 @@ function keyPressed() {
       // noCursor();
     } else {
       cursor();
-    } 
+    }
   }
   // Enter
   if (keyCode == 13) {
@@ -77,7 +77,7 @@ function keyPressed() {
   if (keyCode == 77) {
     showMap = !showMap;
   }
-  
+
   if (canModify) {
     moveMode = false;
     placeMode = false;
@@ -86,13 +86,13 @@ function keyPressed() {
     // 1
     if (keyCode == 49) {
       placeMode = true;
-    // 2
+      // 2
     } else if (keyCode == 50) {
       moveMode = true;
-    // 3
+      // 3
     } else if (keyCode == 51) {
       deleteMode = true;
-    // 4
+      // 4
     } else if (keyCode == 52) {
       selectionMode = true;
     }
@@ -106,26 +106,26 @@ function keyPressed() {
 }
 
 function mousePressed() {
-    mouseHeld = true;
+  mouseHeld = true;
 }
 
 function mouseReleased() {
-    mouseHeld = false;
+  mouseHeld = false;
 }
 
 function mouseClicked() {
-  if (mouseY < runButton.y + runButton.height && 
-      mouseX < mapButton.x + mapButton.width) {
+  if (mouseY < runButton.y + runButton.height &&
+    mouseX < mapButton.x + mapButton.width) {
     return;
   }
-  
+
   if (selectionMode && !RUN) {
     let p = player.pos.copy();
     let m = createVector(mouseX, mouseY);
     launchVel = p5.Vector.sub(m, p);
     launchVel.x /= 100;
     launchVel.y /= 100;
-    player.vel =launchVel.copy()
+    player.vel = launchVel.copy()
   }
 
   if (canModify) {

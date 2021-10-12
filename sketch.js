@@ -29,6 +29,22 @@ function draw() {
   fill(255);
   text("FPS: " + fpsToShow, width - 10, 10);
   pop();
+
+  // Write position to screen
+  push();
+  textAlign(RIGHT);
+  fill(255);
+  text("Rocket position: (" + round(player.pos.x) + ", " + round(player.pos.y) + ")", 
+       width - 10, 30);
+  pop();
+
+  // Write velocity to screen
+  push();
+  textAlign(RIGHT);
+  fill(255);
+  text("Rocket speed: (" + round(player.vel.x) + ", " + round(player.vel.y) + ") px/sec", 
+       width - 10, 50);
+  pop();
 }
 
 function keyPressed() {

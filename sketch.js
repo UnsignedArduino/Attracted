@@ -8,11 +8,13 @@ let fpsToShow;
 
 function setup() {
   createCanvas(width, height);
-  launchVel = createVector()
+  launchVel = createVector();
+  // Make the background
   starBackground = makeBackground();
   frameRate(fps);
   initGame();
   // noCursor();
+  // Only update the FPS display every second so we can actually read it
   setInterval(() => {
     fpsToShow = round(frameRate());
   }, 1000);
@@ -52,15 +54,18 @@ function draw() {
 function keyPressed() {
   // Space
   if (RUN && keyCode == 32) {
+    // Pause the game
     togglePaused();
-    if (!paused) {
-      // noCursor();
-    } else {
-      cursor();
-    }
+    // if (!paused) {
+    //   // noCursor();
+    // } else {
+    //   cursor();
+    // }
   }
+
   // Enter
   if (keyCode == 13) {
+    // Stop or run the game
     RUN = !RUN;
     canModify = !RUN;
     if (RUN) {
@@ -70,18 +75,21 @@ function keyPressed() {
       runButton.text = "Run (Enter)";
     }
   }
+
   // L
   if (keyCode == 76) {
+    // Show the debug lines (shows the attraction between the player and attractors)
     showLines = !showLines;
   }
 
   // M
   if (keyCode == 77) {
+    // Show the map overlay
     showMap = !showMap;
   }
 
   if (canModify) {
-    
+    // Select all the different modes
     // 1
     if (keyCode == 49) {
       moveMode = false;
@@ -108,12 +116,6 @@ function keyPressed() {
       selectionMode = true;
     }
   }
-  // if (keyCode == 52) {
-  //   moveMode = false;
-  //   placeMode = false;
-  //   deleteMode = false
-  //   selectionMode = true
-  // }
 }
 
 function mousePressed() {
@@ -125,52 +127,45 @@ function mouseReleased() {
 }
 
 function mouseClicked() {
+  // Don't do anything in this function if we are up near the buttons
   if (mouseY < runButton.y + runButton.height &&
     mouseX < mapButton.x + mapButton.width) {
     return;
   }
 
+  // Set the initial velocity of the player if we are in selection mode
   if (selectionMode && !RUN) {
     let p = player.pos.copy();
     let m = createVector(mouseX, mouseY);
     launchVel = p5.Vector.sub(m, p);
-    launchVel.setMag(6)
-    player.vel = launchVel.copy()
+    launchVel.setMag(6);
+    player.vel = launchVel.copy();
   }
 
   if (canModify) {
+    // Make new attractors if we are in place mode
     if (placeMode && mouseY < height - 100) {
       if (!showMap) {
         attractors.push(new Attractor(mouseX + PAN.x, mouseY + PAN.y, choosingType));
       } else {
+        // Since we are in the zoomed out map, we place it at the scale
         attractors.push(new Attractor(mouseX * scale, mouseY * scale, choosingType));
       }
-    } else if (placeMode) {
-      let gap = width / 4;
-      if (mouseX < gap) {
-        //choosingType = 0;
-      }
-      if (mouseX > gap && mouseX < gap * 2) {
-        //choosingType = 3;
-      }
-      if (mouseX > gap * 2 && mouseX < gap * 3) {
-        //choosingType = 1;
-      }
-      if (mouseX > gap * 3) {
-        //choosingType = 2;
-      }
     }
+  }
 
-    if (deleteMode && !showMap) {
+  if (deleteMode) {
+    // Delete stuff that is touching the mouse cursor
+    if (showMap) {
       for (index in attractors) {
-        if (dist(attractors[index].pos.x, attractors[index].pos.y, mouseX, mouseY) < attractors[index].currentR) {
+        // Use the scale cause we are in the zoomed-out map
+        if (dist(attractors[index].pos.x / scale, attractors[index].pos.y / scale, mouseX, mouseY) < attractors[index].currentR) {
           attractors.splice(index, 1);
         }
       }
-    }
-    else if (deleteMode && showMap) {
+    } else {
       for (index in attractors) {
-        if (dist(attractors[index].pos.x / scale, attractors[index].pos.y / scale, mouseX, mouseY) < attractors[index].currentR) {
+        if (dist(attractors[index].pos.x, attractors[index].pos.y, mouseX, mouseY) < attractors[index].currentR) {
           attractors.splice(index, 1);
         }
       }

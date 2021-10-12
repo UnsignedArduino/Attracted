@@ -4,6 +4,7 @@ class Attractor {
     this.mass = 20;
     this.r = sqrt(abs(this.mass)) * 2;
     this.canAttract = true;
+    // A numeric value that says whether it's a sun, white hole, etc.
     this.type = t;
     this.angle = 0;
     this.currentR = this.r;
@@ -15,6 +16,7 @@ class Attractor {
     drawPos.sub(PAN);
     let d = dist(this.pos.x, this.pos.y, mover.pos.x, mover.pos.y);
 
+    // Draw a exclaimation mark on the mover if it is closer then 200 px
     if (d <= 200) {
       push();
       fill(255, 0, 0);
@@ -23,15 +25,18 @@ class Attractor {
       pop();
     }
 
+    // Reset the game if we are touching
     if (d < this.currentR / 2) {
       initGame();
       return;
     }
 
+    // Don't do anything else if we can't attract
     if (!this.canAttract) {
       return;
     }
 
+    // Apply the force
     let force = p5.Vector.sub(this.pos, mover.pos);
     let distanceSq = force.magSq();
     let G = 55;
@@ -39,6 +44,7 @@ class Attractor {
     force.setMag(strength);
     mover.applyForce(force);
 
+    // Draw debug lines (enable by pressing the l key)
     if (showLines && d < (width + height)) {
       push();
       stroke(255);
@@ -53,6 +59,7 @@ class Attractor {
     this.pos.sub(PAN);
     let t = this.pos.copy();
 
+    // Only rotate for animating if we are not paused
     if (!paused) {
       this.angle += 0.01;
     }
@@ -61,8 +68,8 @@ class Attractor {
     // fill(0, 0, 0);
     // ellipse(this.pos.x, this.pos.y, this.r*2);   
 
-    // Sun
     let k;
+    // Sun
     if (this.type == 0) {
       this.mass = 30;
       k = 4;
@@ -104,6 +111,7 @@ class Attractor {
       pop();
     }
 
+    // Do dragging stuff
     this.currentR = this.r * k;
     this.pos = temp.copy();
     if (!showMap && canModify) {
@@ -123,8 +131,7 @@ class Attractor {
         this.draggingMe = false;
         dragging = false;
       }
-    }
-    else if (canModify) {
+    } else if (canModify) {
       if (mouseHeld && moveMode) {
         circle(mouseX + PAN.x, mouseY + PAN.y, 10);
         if (dist(mouseX, mouseY, this.pos.x / scale, this.pos.y / scale) < this.currentR) {
@@ -142,6 +149,5 @@ class Attractor {
         dragging = false;
       }
     }
-
   }
 }

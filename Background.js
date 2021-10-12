@@ -24,6 +24,7 @@ function drawBackground() {
   starBackground.fill(255);
   starBackground.noStroke();
   for (let index in starPoints) {
+    // // Animate by fading in and out (twinkle)
     // if (random(1) < 0.0001) {
     //   starSizes[index] = max(starOriginalSizes[index] - 1, 0);
     //   setTimeout(() => {
@@ -45,6 +46,7 @@ function drawBackground() {
     //     starSizes[index] = min(starOriginalSizes[index] + 1, starOriginalSizes[index]);
     //   }, 1000);
     // }
+    // Draw the star
     let vector = starPoints[index];
     starBackground.circle(vector.x - PAN.x, vector.y - PAN.y, /*starSizes[index]*/ 2);
     // if (starPoints[index].x-PAN.x<0){

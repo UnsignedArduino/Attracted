@@ -13,6 +13,7 @@ let whButton;
 let sbhButton;
 let bbhButton;
 
+// Make all the buttons in the game
 function makeButtons() {
   runButton = new Clickable();
   runButton.locate(10, 10);
@@ -143,25 +144,30 @@ function makeButtons() {
   }
 }
 
+// Draw the buttons and update them if neccessary
 function drawButtons() {
   runButton.draw();
 
+  // Only show the pause button if we are running the level
   if (RUN) {
     pauseButton.draw();
   }
 
   pauseButton.text = paused ? "Resume (Space)" : "Pause (Space)";
   if (canModify) {
-    // Draw and highlight the buttons
+    // Draw and highlight the mode buttons
     placeButton.draw();
     moveButton.draw();
     deleteButton.draw();
     selectButton.draw();
-    mapButton.draw()
+    mapButton.draw();
+
+    // First set the color to be unselected
     placeButton.color = unselectedButtonColor;
     moveButton.color = unselectedButtonColor;
     deleteButton.color = unselectedButtonColor;
     selectButton.color = unselectedButtonColor;
+    // The set the color on the selected button
     if (placeMode) {
       placeButton.color = selectedButtonColor;
     } else if (moveMode) {
@@ -176,15 +182,18 @@ function drawButtons() {
   }
 
   if (canModify && placeMode) {
+    // Draw and highlight the celestial body select buttons
     sunButton.draw();
     whButton.draw();
     sbhButton.draw();
     bbhButton.draw();
 
+// First set the color to be unselected
     sunButton.color = unselectedButtonColor;
     whButton.color = unselectedButtonColor;
     sbhButton.color = unselectedButtonColor;
     bbhButton.color = unselectedButtonColor;
+    // The set the color on the selected button
     if (choosingType == 0) {
       sunButton.color = selectedButtonColor;
     } else if (choosingType == 1) {
@@ -195,24 +204,22 @@ function drawButtons() {
       whButton.color = selectedButtonColor;
     }
 
+    // Draw the currently selected celestial body at the mouse point if we are in place mode
     if (mouseY < height - 100) {
       if (!showMap) {
         if (choosingType == 0) {
           let k = 4;
           sun.resize(sqrt(20) * 2 * k, sqrt(20) * 2 * k);
           image(sun, mouseX - sqrt(20) * 2 * k / 2, mouseY - sqrt(20) * 2 * k / 2);
-        }
-        if (choosingType == 1) {
+        } else if (choosingType == 1) {
           let k = 7;
           smallBH.resize(sqrt(20) * 2 * k, sqrt(20) * 2 * k);
           image(smallBH, mouseX - sqrt(20) * 2 * k / 2, mouseY - sqrt(20) * 2 * k / 2);
-        }
-        if (choosingType == 3) {
+        } else if (choosingType == 3) {
           let k = 7;
           WH.resize(sqrt(20) * 2 * k, sqrt(20) * 2 * k);
           image(WH, mouseX - sqrt(20) * 2 * k / 2, mouseY - sqrt(20) * 2 * k / 2);
-        }
-        if (choosingType == 2) {
+        } else if (choosingType == 2) {
           let k = 14;
           bigBH.resize(sqrt(20) * 2 * k, sqrt(20) * 2 * k);
           image(bigBH, mouseX - sqrt(20) * 2 * k / 2, mouseY - sqrt(20) * 2 * k / 2);

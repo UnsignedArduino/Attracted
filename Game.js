@@ -16,7 +16,6 @@ let canModify = true;
 let showLines = false;
 let cameraEasing = 0.1;
 let showMap = false;
-
 let launchVel;
 
 // Images
@@ -33,6 +32,7 @@ let chopsic;
 
 let RUN = false;
 
+// Load a bunch of assets
 function preload() {
   smallBH = loadImage("Assets/smolBH.png");
   WH = loadImage("Assets/smWH.png");
@@ -46,6 +46,7 @@ function preload() {
   chopsic = loadFont("Assets/Chopsic-K6Dp.ttf");
 }
 
+// Set up the game
 function initGame() {
   // Make a player and an attractor object
   placeMode = true;
@@ -65,6 +66,7 @@ function initGame() {
   player.vel = launchVel.copy();
 }
 
+// Update the game
 function updateGame() {
   // Update and draw everything to the screen
   if (!paused && RUN) {

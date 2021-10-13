@@ -4,7 +4,7 @@ let scale = 10;
 function displayMap() {
   push();
   stroke(0);
-  fill(255, 255, 255, 100);
+  fill(100, 100, 100);
   rect(0, 0, width, height);
   fill(255, 0, 0);
   let d = player.vel.copy();
@@ -25,6 +25,25 @@ function displayMap() {
       fill(200, 200, 200);
     }
     circle(a.pos.x / scale, a.pos.y / scale, a.currentR / scale);
+  }
+  for (let a of levelAttractors) {
+    if (a.type == 0) {
+      fill(255, 255, 0);
+    }
+    if (a.type == 1) {
+      fill(200, 200, 200);
+    }
+    if (a.type == 2) {
+      fill(255, 255, 255);
+    }
+    if (a.type == 3) {
+      fill(200, 200, 200);
+    }
+    circle(a.pos.x / scale, a.pos.y / scale, a.currentR / (scale));
+  }
+  for (let a of levelAsteroids) {
+    fill(200, 200, 200)
+    circle(a.x / scale, a.y / scale, (scale));
   }
   pop();
 }

@@ -1,6 +1,3 @@
-const unselectedButtonColor = "#FFFFFF";
-const selectedButtonColor = "#1D9ECB";
-
 let att;
 let att2;
 let player;
@@ -17,6 +14,11 @@ let showLines = false;
 let cameraEasing = 0.1;
 let showMap = false;
 let launchVel;
+let levelAttractors = []
+let levelAsteroids = []
+let splashAttractors = []
+
+let isSplash = true
 
 // Images
 let smallBH;
@@ -46,18 +48,36 @@ function preload() {
   chopsic = loadFont("Assets/Chopsic-K6Dp.ttf");
 }
 
+function randomLevel(){
+  levelAttractors = []
+  levelAsteroids = []
+  for (let i=0;i<10;i++){
+    levelAttractors.push(new Attractor(
+      random(0, width*10), 
+      random(0, height*10), 
+      floor(random(0, 4))))
+    levelAttractors[i].unchangeable = true
+  }
+  for (let i=0;i<30;i++){
+    levelAsteroids.push(new createVector(random(0, width*10), 
+      random(0, height*10)))
+  }
+}
+
 // Set up the game
 function initGame() {
+  splashAttractors = []
   // Make a player and an attractor object
+  randomLevel()
   placeMode = true;
   starBackground.background(0);
   starBackground = makeBackground();
   //attractors = [];
   choosingType = 0;
   PAN = createVector(0, 0);
-  player = new Player(width / 2, height / 2, 5);
+  player = new Player(width / 2, height/2, 5);
   RUN = false;
-  placeMode = true;
+  placeMode = false;
   moveMode = false;
   deleteMode = false;
   selectionMode = false;
@@ -74,22 +94,56 @@ function updateGame() {
     for (let i = 0; i < attractors.length; i++) {
       attractors[i].attract(player);
     }
+    for (let i = 0; i < levelAttractors.length; i++) {
+      levelAttractors[i].attract(player);
+    }
+    for (let i=0;i<levelAsteroids.length;i++){
+      if (dist(player.pos.x, player.pos.y, levelAsteroids[i].x, levelAsteroids[i].y) < 20){
+        initGame()
+      }
+      
+    }
     player.update();
     PAN.x += (player.pos.x - width / 2 - PAN.x) * cameraEasing;
     PAN.y += (player.pos.y - height / 2 - PAN.y) * cameraEasing;
   }
 
   // Draws everything to screen
-  for (let i = 0; i < attractors.length; i++) {
-    attractors[i].show();
+  if (!isSplash){ 
+    for (let i = 0; i < attractors.length; i++) {
+      attractors[i].show();
+    }
+    for (let i = 0; i < levelAttractors.length; i++) {
+      levelAttractors[i].show();
+    }
+    for (let i = 0; i < levelAsteroids.length; i++) {
+      push()
+      fill(200, 200, 200)
+      circle(levelAsteroids[i].x-PAN.x, levelAsteroids[i].y-PAN.y, 20)
+      pop()
+    }
+    
+    player.show();
+    if (showMap) {
+      displayMap();
+    }
+    drawButtons();
   }
-
-  drawButtons();
-
-  player.show();
-
-  if (showMap) {
-    displayMap();
+  else{
+    if (PAN.x > height*9){
+      PAN.x = 0
+    }
+    for (let i=splashAttractors.length-1;i>=0;i--){
+      splashAttractors[i].show()
+      if (splashAttractors[i].pos.x-PAN.x < -20){
+        splashAttractors.splice(i, 1);
+      }
+    }
+    if (random(0, 1) < 0.001){
+      splashAttractors.push(new Attractor(PAN.x+width+100, random(0, height), floor(random(0, 4))))
+    }
+    PAN.x+=5
+    splahScreenRun.draw()
   }
 
   // Set the position of the attractor to your mouse position

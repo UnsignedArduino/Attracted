@@ -1,6 +1,13 @@
+// Colors
+const unselectedButtonColor = "#FFFFFF";
+const selectedButtonColor = "#1D9ECB";
+const hoverButtonColor = "#9bd9e8";
+
 // Buttons
 let runButton;
 let pauseButton;
+
+let splahScreenRun;
 
 let placeButton;
 let selectButton;
@@ -28,15 +35,35 @@ function makeButtons() {
       initGame()
       runButton.text = "Run (Enter)";
     }
+    runButton.color = selectedButtonColor;
+  }
+  runButton.onHover = function() {
+    runButton.color = hoverButtonColor;
+  }
+  runButton.onOutside = function() {
+    runButton.color = unselectedButtonColor;
+  }
+  runButton.onRelease = function() {
+    runButton.color = hoverButtonColor;
   }
   canModify = true;
 
   pauseButton = new Clickable();
-  pauseButton.locate(10, 50);
+  pauseButton.locate(120, 10);
   pauseButton.resize(100, 30);
   pauseButton.text = "Pause (Space)";
-  pauseButton.onPress = function () {
+  pauseButton.onHover = function() {
+    pauseButton.color = hoverButtonColor;
+  }
+  pauseButton.onOutside = function() {
+    pauseButton.color = unselectedButtonColor;
+  }
+  pauseButton.onPress = function() {
     paused = !paused;
+    pauseButton.color = selectedButtonColor;
+  }
+  pauseButton.onRelease = function() {
+    pauseButton.color = hoverButtonColor;
   }
 
   placeButton = new Clickable();
@@ -48,6 +75,14 @@ function makeButtons() {
     moveMode = false;
     deleteMode = false;
     selectionMode = false;
+    placeButton.color = selectedButtonColor;
+  }
+  placeButton.onRelease = function() {
+    placeButton.color = placeMode ? selectedButtonColor : unselectedButtonColor;
+  }
+  placeButton.onOutside = placeButton.onRelease;
+  placeButton.onHover = function() {
+    placeButton.color = placeMode ? selectedButtonColor : hoverButtonColor;
   }
 
   moveButton = new Clickable();
@@ -59,6 +94,14 @@ function makeButtons() {
     moveMode = true;
     deleteMode = false;
     selectionMode = false;
+    moveButton.color = selectedButtonColor;
+  }
+  moveButton.onRelease = function() {
+    moveButton.color = moveMode ? selectedButtonColor : unselectedButtonColor;
+  }
+  moveButton.onOutside = moveButton.onRelease;
+  moveButton.onHover = function() {
+    moveButton.color = moveMode ? selectedButtonColor : hoverButtonColor;
   }
 
   deleteButton = new Clickable();
@@ -70,25 +113,50 @@ function makeButtons() {
     moveMode = false;
     deleteMode = true;
     selectionMode = false;
+    deleteButton.color = selectedButtonColor;
+  }
+  deleteButton.onRelease = function() {
+    deleteButton.color = deleteMode ? selectedButtonColor : unselectedButtonColor;
+  }
+  deleteButton.onOutside = deleteButton.onRelease
+  deleteButton.onHover = function() {
+    deleteButton.color = deleteMode ? selectedButtonColor : hoverButtonColor;
   }
 
   selectButton = new Clickable();
   selectButton.locate(470, 10);
   selectButton.resize(110, 30);
-  selectButton.text = "Select mode (4)";
+  selectButton.text = "Launch mode (4)";
   selectButton.onPress = function () {
     placeMode = false;
     moveMode = false;
     deleteMode = false;
     selectionMode = true;
+    selectButton.color = selectedButtonColor;
+  }
+  selectButton.onRelease = function() {
+    selectButton.color = selectionMode ? selectedButtonColor : unselectedButtonColor;
+  }
+  selectButton.onOutside = selectButton.onRelease;
+  selectButton.onHover = function() {
+    selectButton.color = selectionMode ? selectedButtonColor : hoverButtonColor;
   }
 
   mapButton = new Clickable();
-  mapButton.locate(590, 10);
+  mapButton.locate(10, 50);
   mapButton.resize(110, 30);
   mapButton.text = "Open map (m)";
   mapButton.onPress = function () {
     showMap = !showMap;
+    mapButton.text = showMap ? "Close map (m)" : "Open map (m)";
+    mapButton.color = selectedButtonColor;
+  } 
+  mapButton.onRelease = function() {
+    mapButton.color = showMap ? selectedButtonColor : unselectedButtonColor;
+  }
+  mapButton.onOutside = mapButton.onRelease;
+  mapButton.onHover = function() {
+    mapButton.color = showMap ? selectedButtonColor : hoverButtonColor;
   }
 
   sunButton = new Clickable();
@@ -142,11 +210,32 @@ function makeButtons() {
   bbhButton.onPress = function() {
     choosingType = 2;
   }
+
+  splahScreenRun = new Clickable();
+  splahScreenRun.locate(width / 2 - 150, height / 2 - 100);
+  splahScreenRun.resize(300, 100);
+  splahScreenRun.textFont = chopsic;
+  splahScreenRun.textSize = 30;
+  splahScreenRun.text = "Start Game";
+  splahScreenRun.onHover = function() {
+    splahScreenRun.color = hoverButtonColor;
+  }
+  splahScreenRun.onOutside = function() {
+    splahScreenRun.color = unselectedButtonColor;
+  }
+  splahScreenRun.onPress = function() {
+    splahScreenRun.color = selectedButtonColor;
+    isSplash = false
+    //PAN = createVector(0,height*5-height/2)
+    PAN = createVector(0, 0)
+  }
 }
 
 // Draw the buttons and update them if neccessary
+
 function drawButtons() {
   runButton.draw();
+  mapButton.draw();
 
   // Only show the pause button if we are running the level
   if (RUN) {
@@ -160,25 +249,6 @@ function drawButtons() {
     moveButton.draw();
     deleteButton.draw();
     selectButton.draw();
-    mapButton.draw();
-
-    // First set the color to be unselected
-    placeButton.color = unselectedButtonColor;
-    moveButton.color = unselectedButtonColor;
-    deleteButton.color = unselectedButtonColor;
-    selectButton.color = unselectedButtonColor;
-    // The set the color on the selected button
-    if (placeMode) {
-      placeButton.color = selectedButtonColor;
-    } else if (moveMode) {
-      moveButton.color = selectedButtonColor;
-    } else if (deleteMode) {
-      deleteButton.color = selectedButtonColor;
-    } else if (selectionMode) {
-      selectButton.color = selectedButtonColor;
-    }
-    mapButton.color = showMap ? selectedButtonColor : unselectedButtonColor;
-    mapButton.text = showMap ? "Close map (m)" : "Open map (m)";
   }
 
   if (canModify && placeMode) {
@@ -188,7 +258,7 @@ function drawButtons() {
     sbhButton.draw();
     bbhButton.draw();
 
-// First set the color to be unselected
+    // First set the color to be unselected
     sunButton.color = unselectedButtonColor;
     whButton.color = unselectedButtonColor;
     sbhButton.color = unselectedButtonColor;
@@ -207,22 +277,24 @@ function drawButtons() {
     // Draw the currently selected celestial body at the mouse point if we are in place mode
     if (mouseY < height - 100) {
       if (!showMap) {
+        let m = 5
         if (choosingType == 0) {
           let k = 4;
-          sun.resize(sqrt(20) * 2 * k, sqrt(20) * 2 * k);
-          image(sun, mouseX - sqrt(20) * 2 * k / 2, mouseY - sqrt(20) * 2 * k / 2);
+        
+          sun.resize(sqrt(20) * m * k, sqrt(20) * m * k);
+          image(sun, mouseX - sqrt(20) * m * k / 2, mouseY - sqrt(20) * m * k / 2);
         } else if (choosingType == 1) {
           let k = 7;
-          smallBH.resize(sqrt(20) * 2 * k, sqrt(20) * 2 * k);
-          image(smallBH, mouseX - sqrt(20) * 2 * k / 2, mouseY - sqrt(20) * 2 * k / 2);
+          smallBH.resize(sqrt(20) * m * k, sqrt(20) * m * k);
+          image(smallBH, mouseX - sqrt(20) * m * k / 2, mouseY - sqrt(20) * m * k / 2);
         } else if (choosingType == 3) {
           let k = 7;
-          WH.resize(sqrt(20) * 2 * k, sqrt(20) * 2 * k);
-          image(WH, mouseX - sqrt(20) * 2 * k / 2, mouseY - sqrt(20) * 2 * k / 2);
+          WH.resize(sqrt(20) * m * k, sqrt(20) * m * k);
+          image(WH, mouseX - sqrt(20) * m * k / 2, mouseY - sqrt(20) * m * k / 2);
         } else if (choosingType == 2) {
           let k = 14;
-          bigBH.resize(sqrt(20) * 2 * k, sqrt(20) * 2 * k);
-          image(bigBH, mouseX - sqrt(20) * 2 * k / 2, mouseY - sqrt(20) * 2 * k / 2);
+          bigBH.resize(sqrt(20) * m * k, sqrt(20) * m * k);
+          image(bigBH, mouseX - sqrt(20) * m * k / 2, mouseY - sqrt(20) * m * k / 2);
         }
       }
     }

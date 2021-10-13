@@ -26,6 +26,11 @@ function draw() {
   image(starBackground, 0, 0);
   updateGame();
 
+  // Skip drawing stats to screen if in splash screen
+  if (isSplash) {
+    return;
+  }
+
   // Write FPS to screen
   textSize(12)
   push();
@@ -52,6 +57,9 @@ function draw() {
 }
 
 function keyPressed() {
+  if (isSplash){
+    return
+  }
   // Space
   if (RUN && keyCode == 32) {
     // Pause the game
@@ -127,6 +135,9 @@ function mouseReleased() {
 }
 
 function mouseClicked() {
+  if (isSplash){
+    return
+  }
   // Don't do anything in this function if we are up near the buttons
   if (mouseY < runButton.y + runButton.height &&
     mouseX < mapButton.x + mapButton.width) {
@@ -135,11 +146,21 @@ function mouseClicked() {
 
   // Set the initial velocity of the player if we are in selection mode
   if (selectionMode && !RUN) {
-    let p = player.pos.copy();
-    let m = createVector(mouseX, mouseY);
-    launchVel = p5.Vector.sub(m, p);
-    launchVel.setMag(6);
-    player.vel = launchVel.copy();
+    if (showMap){
+      let p = player.pos.copy();
+      p.div(scale)
+      let m = createVector(mouseX, mouseY);
+      launchVel = p5.Vector.sub(m, p);
+      launchVel.setMag(6);
+      player.vel = launchVel.copy();
+    }
+    else{
+      let p = player.pos.copy();
+      let m = createVector(mouseX, mouseY);
+      launchVel = p5.Vector.sub(m, p);
+      launchVel.setMag(6);
+      player.vel = launchVel.copy();
+    }
   }
 
   if (canModify) {

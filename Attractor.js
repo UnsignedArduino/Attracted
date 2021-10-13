@@ -2,13 +2,14 @@ class Attractor {
   constructor(x, y, t) {
     this.pos = createVector(x, y);
     this.mass = 20;
-    this.r = sqrt(abs(this.mass)) * 2;
+    this.r = sqrt(abs(this.mass)) * 5;
     this.canAttract = true;
     // A numeric value that says whether it's a sun, white hole, etc.
     this.type = t;
     this.angle = 0;
     this.currentR = this.r;
     this.draggingMe = false;
+    this.unchangeable = false
   }
 
   attract(mover) {
@@ -91,7 +92,7 @@ class Attractor {
       pop();
       // Big black hole
     } else if (this.type == 2) {
-      this.mass = 200
+      this.mass = 300
       k = 14;
       push();
       translate(this.pos.x, this.pos.y);
@@ -114,39 +115,43 @@ class Attractor {
     // Do dragging stuff
     this.currentR = this.r * k;
     this.pos = temp.copy();
-    if (!showMap && canModify) {
-      if (mouseHeld && moveMode) {
-        circle(mouseX + PAN.x, mouseY + PAN.y, 10);
-        if (dist(mouseX + PAN.x, mouseY + PAN.y, this.pos.x, this.pos.y) < this.currentR) {
-          if (!dragging) {
-            dragging = true;
-            this.draggingMe = true;
+    if (!this.unchangeable){
+      
+      
+      if (!showMap && canModify) {
+        if (mouseHeld && moveMode) {
+          circle(mouseX + PAN.x, mouseY + PAN.y, 10);
+          if (dist(mouseX + PAN.x, mouseY + PAN.y, this.pos.x, this.pos.y) < this.currentR) {
+            if (!dragging) {
+              dragging = true;
+              this.draggingMe = true;
+            }
           }
-        }
-        if (this.draggingMe) {
-          this.pos.x = mouseX + PAN.x;
-          this.pos.y = mouseY + PAN.y;
-        }
-      } else {
-        this.draggingMe = false;
-        dragging = false;
-      }
-    } else if (canModify) {
-      if (mouseHeld && moveMode) {
-        circle(mouseX + PAN.x, mouseY + PAN.y, 10);
-        if (dist(mouseX, mouseY, this.pos.x / scale, this.pos.y / scale) < this.currentR) {
-          if (!dragging) {
-            dragging = true;
-            this.draggingMe = true;
+          if (this.draggingMe) {
+            this.pos.x = mouseX + PAN.x;
+            this.pos.y = mouseY + PAN.y;
           }
+        } else {
+          this.draggingMe = false;
+          dragging = false;
         }
-        if (this.draggingMe) {
-          this.pos.x = mouseX * scale;
-          this.pos.y = mouseY * scale;
+      } else if (canModify) {
+        if (mouseHeld && moveMode) {
+          circle(mouseX + PAN.x, mouseY + PAN.y, 10);
+          if (dist(mouseX, mouseY, this.pos.x / scale, this.pos.y / scale) < this.currentR) {
+            if (!dragging) {
+              dragging = true;
+              this.draggingMe = true;
+            }
+          }
+          if (this.draggingMe) {
+            this.pos.x = mouseX * scale;
+            this.pos.y = mouseY * scale;
+          }
+        } else {
+          this.draggingMe = false;
+          dragging = false;
         }
-      } else {
-        this.draggingMe = false;
-        dragging = false;
       }
     }
   }

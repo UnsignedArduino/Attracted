@@ -5,14 +5,14 @@ let starSizes = [];
 
 function makeBackground() {
   let graphics = createGraphics(width, height);
-  let starCount = random(0, (height + width) * 3);
+  let starCount = random(0, (height + width) * 4);
   starBackground = null;
   starPoints = [];
   starOriginalSizes = [];
   starSizes = [];
   for (let c = 0; c < starCount; c++) {
     starPoints.push(createVector(random(-width, width * 10), random(-height, height * 10)));
-    let size = random(1, 3);
+    let size = random(1, 5);
     starOriginalSizes.push(size);
     starSizes.push(size);
   }
@@ -48,7 +48,7 @@ function drawBackground() {
     // }
     // Draw the star
     let vector = starPoints[index];
-    starBackground.circle(vector.x - PAN.x, vector.y - PAN.y, /*starSizes[index]*/ 2);
+    starBackground.circle(vector.x - PAN.x, vector.y - PAN.y, /*starSizes[index]*/ 4);
     // if (starPoints[index].x-PAN.x<0){
     //     starPoints.splice(index, 1);
     //     starPoints.push(new createVector(width+PAN.x, random(0, height)))

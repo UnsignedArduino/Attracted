@@ -248,10 +248,10 @@ function makeButtons() {
   }
 
   splahScreenRun = new Clickable();
-  splahScreenRun.locate(width / 2 - 150, height / 2 - 100);
-  splahScreenRun.resize(300, 100);
+  splahScreenRun.locate(width / 2 - 100, height - (height / 4));
+  splahScreenRun.resize(200, 100);
   splahScreenRun.textFont = chopsic;
-  splahScreenRun.textSize = 30;
+  splahScreenRun.textSize = 20;
   splahScreenRun.text = "Start Game";
   splahScreenRun.onHover = function() {
     splahScreenRun.color = hoverButtonColor;
@@ -261,9 +261,9 @@ function makeButtons() {
   }
   splahScreenRun.onPress = function() {
     splahScreenRun.color = selectedButtonColor;
-    isSplash = false
-    // PAN = createVector(0,height*5-height/2)
-    PAN = createVector(0, 0)
+    isSplash = false;
+    // PAN = createVector(0, height * 5 - height / 2);
+    PAN = createVector(0, 0);
   }
 }
 

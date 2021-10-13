@@ -28,6 +28,21 @@ function draw() {
 
   // Skip drawing stats to screen if in splash screen
   if (isSplash) {
+    push();
+    textAlign(CENTER);
+    textSize(50);
+    fill(255);
+    textFont(chopsic);
+    text("Attracted", width / 2, height / 4);
+    textSize(15);
+    fill(192);
+    text("A space game made by Bobingstern and UnsignedArduino\nFor the repl.it 2021 game jam", 
+         width / 2, height / 4 + 30);
+    text("Press any key to begin", 
+         splahScreenRun.x + (splahScreenRun.width / 2), 
+         splahScreenRun.y + splahScreenRun.height + 20);
+    pop();
+    // Draw the splash screen before we exit
     return;
   }
 
@@ -57,8 +72,14 @@ function draw() {
 }
 
 function keyPressed() {
-  if (isSplash){
-    return
+  // Don't listen to the normal key bindings if we are in the splash screen 
+  // and exit the splash screen on any key press
+  if (isSplash) {
+    splahScreenRun.color = selectedButtonColor;
+    isSplash = false;
+    // PAN = createVector(0, height * 5 - height / 2);
+    PAN = createVector(0, 0);
+    return;
   }
   // Space
   if (RUN && keyCode == 32) {

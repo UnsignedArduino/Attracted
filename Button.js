@@ -162,53 +162,89 @@ function makeButtons() {
   sunButton = new Clickable();
   sunButton.locate(10, height - 110);
   sunButton.resize(200, 100);
-  sunButton.text = "Small Star";
+  sunButton.text = "";
+  // sunButton.text = "Small Star";
   sunButton.image = sun2;
   sunButton.fitImage = true;
-  sunButton.imageScale = 1.2;
+  sunButton.imageScale = 0.6;
   sunButton.textFont = chopsic;
   sunButton.textSize = 15;
   sunButton.onPress = function() {
     choosingType = 0;
+    sunButton.color = selectedButtonColor;
+  }
+  sunButton.onRelease = function() {
+    sunButton.color = choosingType == 0 ? selectedButtonColor : unselectedButtonColor;
+  }
+  sunButton.onOutside = sunButton.onRelease;
+  sunButton.onHover = function() {
+    sunButton.color = choosingType == 0 ? selectedButtonColor : hoverButtonColor;
   }
 
   whButton = new Clickable();
   whButton.locate(220, height - 110);
   whButton.resize(200, 100);
-  whButton.text = "White Hole";
+  whButton.text = "";
+  // whButton.text = "White Hole";
   whButton.image = WH2;
   whButton.fitImage = true;
-  whButton.imageScale = 1.2;
+  whButton.imageScale = 0.6;
   whButton.textFont = chopsic;
   whButton.textSize = 15;
   whButton.onPress = function() {
     choosingType = 3;
+    whButton.color = selectedButtonColor;
+  }
+  whButton.onRelease = function() {
+    whButton.color = choosingType == 3 ? selectedButtonColor : unselectedButtonColor;
+  }
+  whButton.onOutside = whButton.onRelease;
+  whButton.onHover = function() {
+    whButton.color = choosingType == 3 ? selectedButtonColor : hoverButtonColor;
   }
 
   sbhButton = new Clickable();
   sbhButton.locate(430, height - 110)
   sbhButton.resize(200, 100);
-  sbhButton.text = "Small Black Hole";
-  sbhButton.image = WH2;
+  sbhButton.text = "";
+  // sbhButton.text = "Small Black Hole";
+  sbhButton.image = smallBH;
   sbhButton.fitImage = true;
-  sbhButton.imageScale = 1.2;
+  sbhButton.imageScale = 0.6;
   sbhButton.textFont = chopsic;
   sbhButton.textSize = 15;
   sbhButton.onPress = function() {
     choosingType = 1;
+    sbhButton.color = selectedButtonColor;
+  }
+  sbhButton.onRelease = function() {
+    sbhButton.color = choosingType == 1 ? selectedButtonColor : unselectedButtonColor;
+  }
+  sbhButton.onOutside = sbhButton.onRelease;
+  sbhButton.onHover = function() {
+    sbhButton.color = choosingType == 1 ? selectedButtonColor : hoverButtonColor;
   }
 
   bbhButton = new Clickable();
   bbhButton.locate(640, height - 110);
   bbhButton.resize(200, 100);
-  bbhButton.text = "Big Black Hole";
-  bbhButton.image = WH2;
+  bbhButton.text = "";
+  // bbhButton.text = "Big Black Hole";
+  bbhButton.image = bigBH;
   bbhButton.fitImage = true;
-  bbhButton.imageScale = 1.2;
+  bbhButton.imageScale = 0.6;
   bbhButton.textFont = chopsic;
   bbhButton.textSize = 15;
   bbhButton.onPress = function() {
     choosingType = 2;
+    bbhButton.color = selectedButtonColor;
+  }
+  bbhButton.onRelease = function() {
+    bbhButton.color = choosingType == 2 ? selectedButtonColor : unselectedButtonColor;
+  }
+  bbhButton.onOutside = bbhButton.onRelease;
+  bbhButton.onHover = function() {
+    bbhButton.color = choosingType == 2 ? selectedButtonColor : hoverButtonColor;
   }
 
   splahScreenRun = new Clickable();
@@ -226,7 +262,7 @@ function makeButtons() {
   splahScreenRun.onPress = function() {
     splahScreenRun.color = selectedButtonColor;
     isSplash = false
-    //PAN = createVector(0,height*5-height/2)
+    // PAN = createVector(0,height*5-height/2)
     PAN = createVector(0, 0)
   }
 }
@@ -257,22 +293,6 @@ function drawButtons() {
     whButton.draw();
     sbhButton.draw();
     bbhButton.draw();
-
-    // First set the color to be unselected
-    sunButton.color = unselectedButtonColor;
-    whButton.color = unselectedButtonColor;
-    sbhButton.color = unselectedButtonColor;
-    bbhButton.color = unselectedButtonColor;
-    // The set the color on the selected button
-    if (choosingType == 0) {
-      sunButton.color = selectedButtonColor;
-    } else if (choosingType == 1) {
-      sbhButton.color = selectedButtonColor;
-    } else if (choosingType == 2) {
-      bbhButton.color = selectedButtonColor;
-    } else if (choosingType == 3) {
-      whButton.color = selectedButtonColor;
-    }
 
     // Draw the currently selected celestial body at the mouse point if we are in place mode
     if (mouseY < height - 100) {

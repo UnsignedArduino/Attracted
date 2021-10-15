@@ -11,7 +11,7 @@ function makeBackground() {
   starOriginalSizes = [];
   starSizes = [];
   for (let c = 0; c < starCount; c++) {
-    starPoints.push(createVector(random(-width, width * 10), random(-height, height * 10)));
+    starPoints.push(createVector(random(-width, width * 11), random(-height, height * 11)));
     let size = random(1, 5);
     starOriginalSizes.push(size);
     starSizes.push(size);

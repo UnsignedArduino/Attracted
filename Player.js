@@ -58,9 +58,9 @@ class Player {
       stroke(255);
       strokeWeight(2);
       fill(255, 100);
-      ellipse(this.pos.x, this.pos.y, this.r * 2);
+      ellipse(drawPos.x, drawPos.y, this.r * 2);
       let d1 = this.vel.copy();
-      drawArrow(this.pos, d1.mult(15), 'blue');
+      drawArrow(drawPos, d1.mult(15), 'blue');
       pop();
     }
   }

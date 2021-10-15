@@ -14,9 +14,12 @@ let showLines = false;
 let cameraEasing = 0.1;
 let showMap = false;
 let launchVel;
-let levelAttractors = []
-let levelAsteroids = []
-let splashAttractors = []
+let levelAttractors = [];
+let levelAsteroids = [];
+let splashAttractors = [];
+let maxLevel = 1;
+let onLevel = 0;
+let multiUpdate = 1;
 
 let isSplash = true
 
@@ -48,34 +51,28 @@ function preload() {
   chopsic = loadFont("Assets/Chopsic-K6Dp.ttf");
 }
 
-function randomLevel(){
-  levelAttractors = []
-  levelAsteroids = []
-  for (let i=0;i<10;i++){
-    levelAttractors.push(new Attractor(
-      random(0, width*10), 
-      random(0, height*10), 
-      floor(random(0, 4))))
-    levelAttractors[i].unchangeable = true
-  }
-  for (let i=0;i<30;i++){
-    levelAsteroids.push(new createVector(random(0, width*10), 
-      random(0, height*10)))
+// Dev function
+function logAllAttractors() {
+  let arr = [];
+  for (let i of attractors) {
+    arr.push([i.pos.x, i.pos.y]);
+    console.log("[" + i.pos.x + ", " + i.pos.y + "],");
   }
 }
 
 // Set up the game
 function initGame() {
-  splashAttractors = []
+  multiUpdate = 1
+  splashAttractors = [];
   // Make a player and an attractor object
-  randomLevel()
+  // randomLevel()
   placeMode = true;
   starBackground.background(0);
   starBackground = makeBackground();
-  //attractors = [];
+  // attractors = [];
   choosingType = 0;
   PAN = createVector(0, 0);
-  player = new Player(width / 2, height/2, 5);
+  player = new Player(width / 2, height * 5, 5);
   RUN = false;
   placeMode = false;
   moveMode = false;
@@ -88,28 +85,50 @@ function initGame() {
 
 // Update the game
 function updateGame() {
-  // Update and draw everything to the screen
-  if (!paused && RUN) {
-    // Only updates and moves the player if not paused
-    for (let i = 0; i < attractors.length; i++) {
-      attractors[i].attract(player);
-    }
-    for (let i = 0; i < levelAttractors.length; i++) {
-      levelAttractors[i].attract(player);
-    }
-    for (let i=0;i<levelAsteroids.length;i++){
-      if (dist(player.pos.x, player.pos.y, levelAsteroids[i].x, levelAsteroids[i].y) < 20){
-        initGame()
-      }
-      
-    }
-    player.update();
-    PAN.x += (player.pos.x - width / 2 - PAN.x) * cameraEasing;
-    PAN.y += (player.pos.y - height / 2 - PAN.y) * cameraEasing;
+  if (showGuide) {
+    updateGuide();
   }
-
-  // Draws everything to screen
-  if (!isSplash){ 
+  // Update and draw everything to the screen
+  for (let n = 0; n < multiUpdate; n ++) {
+    if (!paused && RUN) {
+      // Only updates and moves the player if not paused
+      for (let i = 0; i < attractors.length; i++) {
+        attractors[i].attract(player);
+      }
+      // Update the attractors already built-in to the level
+      for (let i = 0; i < levelAttractors.length; i++) {
+        levelAttractors[i].attract(player);
+      }
+      // Reset the game if we crash into a asteroid
+      for (let i = 0; i < levelAsteroids.length; i++) {
+        if (dist(player.pos.x, player.pos.y, levelAsteroids[i].x, levelAsteroids[i].y) < 40) {
+          initGame();
+        }
+      }
+      player.update();
+    }
+  
+    // Update the camera panning if we aren't in the splash screen or not paused
+    if (!paused && !isSplash) {
+      PAN.x += (player.pos.x - width / 2 - PAN.x) * cameraEasing;
+      PAN.y += (player.pos.y - height / 2 - PAN.y) * cameraEasing;
+    }
+  }
+  
+  // Draws everything to screen if we are not in the pause screen
+  if (!isSplash) { 
+    push();
+    textFont(chopsic);
+    fill(255);
+    textSize(20);
+    // Show the level we are currently on
+    if (onLevel == 0) {
+      text("Level: Free play", 720, 30);
+    } else {
+      text("Level: " + onLevel, 720, 30);
+    }
+    pop();
+    // Draw all the attractors and asteroids
     for (let i = 0; i < attractors.length; i++) {
       attractors[i].show();
     }
@@ -117,33 +136,39 @@ function updateGame() {
       levelAttractors[i].show();
     }
     for (let i = 0; i < levelAsteroids.length; i++) {
-      push()
-      fill(200, 200, 200)
-      circle(levelAsteroids[i].x-PAN.x, levelAsteroids[i].y-PAN.y, 20)
-      pop()
+      push();
+      fill(200, 200, 200);
+      circle(levelAsteroids[i].x - PAN.x, levelAsteroids[i].y - PAN.y, 40);
+      pop();
     }
     
+    // Show the player and maybe the map
     player.show();
     if (showMap) {
       displayMap();
     }
+    // Draw the map
     drawButtons();
-  }
-  else{
-    if (PAN.x > height*9){
-      PAN.x = 0
+  } else {
+    // Keep cycling through
+    if (PAN.x > height * 9) {
+      PAN.x = 0;
+      splashAttractors = []
     }
-    for (let i=splashAttractors.length-1;i>=0;i--){
-      splashAttractors[i].show()
-      if (splashAttractors[i].pos.x-PAN.x < -20){
+    // Iterate through all the attractors in the splash screen and pop them if they are out of the screen
+    for (let i = splashAttractors.length - 1; i >= 0; i --) {
+      splashAttractors[i].show();
+      if (splashAttractors[i].pos.x - PAN.x < -200) {
         splashAttractors.splice(i, 1);
       }
     }
-    if (random(0, 1) < 0.001){
-      splashAttractors.push(new Attractor(PAN.x+width+100, random(0, height), floor(random(0, 4))))
+    // Make a splash attractor with a 0.1% chance every frame
+    if (random(0, 1) < 0.001) {
+      splashAttractors.push(new Attractor(PAN.x + width + 100, random(0, height), floor(random(0, 4))));
     }
-    PAN.x+=5
-    splahScreenRun.draw()
+    // Scroll a bit
+    PAN.x += 5;
+    splahScreenRun.draw();
   }
 
   // Set the position of the attractor to your mouse position

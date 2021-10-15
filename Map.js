@@ -16,10 +16,10 @@ function displayMap() {
       fill(255, 255, 0);
     }
     if (a.type == 1) {
-      fill(200, 200, 200);
+      fill(50);
     }
     if (a.type == 2) {
-      fill(255, 255, 255);
+      fill(50);
     }
     if (a.type == 3) {
       fill(200, 200, 200);
@@ -43,7 +43,7 @@ function displayMap() {
   }
   for (let a of levelAsteroids) {
     fill(200, 200, 200)
-    circle(a.x / scale, a.y / scale, (scale));
+    circle(a.x / scale, a.y / scale, 40/scale);
   }
   pop();
 }

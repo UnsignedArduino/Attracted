@@ -137,8 +137,7 @@ class Attractor {
         }
       } else if (canModify) {
         if (mouseHeld && moveMode) {
-          circle(mouseX + PAN.x, mouseY + PAN.y, 10);
-          if (dist(mouseX, mouseY, this.pos.x / scale, this.pos.y / scale) < this.currentR) {
+          if (dist(mouseX, mouseY, this.pos.x / scale, this.pos.y / scale) < this.currentR/scale) {
             if (!dragging) {
               dragging = true;
               this.draggingMe = true;

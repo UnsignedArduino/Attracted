@@ -17,9 +17,9 @@ let launchVel;
 let levelAttractors = [];
 let levelAsteroids = [];
 let splashAttractors = [];
-let maxLevel = 1;
+let maxLevel = 3;
 let onLevel = 0;
-let multiUpdate = 1;
+let multiUpdate = 1
 
 let isSplash = true
 
@@ -33,7 +33,10 @@ let sun2;
 let WH;
 let WH2;
 let rocket;
+let flag
 let chopsic;
+let flagPos;
+let circlePos
 
 let RUN = false;
 
@@ -48,6 +51,7 @@ function preload() {
   bigBH2 = loadImage("Assets/bigBH.png");
   sun2 = loadImage("Assets/SUN.png");
   rocket = loadImage("Assets/rocket-ship.png");
+  flag = loadImage("Assets/Flag.png");
   chopsic = loadFont("Assets/Chopsic-K6Dp.ttf");
 }
 
@@ -62,7 +66,9 @@ function logAllAttractors() {
 
 // Set up the game
 function initGame() {
-  multiUpdate = 1
+  circlePos = createVector(0, 0);
+  
+  multiUpdate = 1;
   splashAttractors = [];
   // Make a player and an attractor object
   // randomLevel()
@@ -71,7 +77,7 @@ function initGame() {
   starBackground = makeBackground();
   // attractors = [];
   choosingType = 0;
-  PAN = createVector(0, 0);
+  PAN = createVector(0, 3402);
   player = new Player(width / 2, height * 5, 5);
   RUN = false;
   placeMode = false;
@@ -81,10 +87,14 @@ function initGame() {
   makeButtons();
   textSize(12);
   player.vel = launchVel.copy();
+  flag.resize(200, 200);
+  //runLevel(onLevel)
 }
 
 // Update the game
 function updateGame() {
+  circlePos = createVector(flagPos.x - PAN.x + 125, flagPos.y - PAN.y + 190)
+
   if (showGuide) {
     updateGuide();
   }
@@ -116,18 +126,20 @@ function updateGame() {
   }
   
   // Draws everything to screen if we are not in the pause screen
-  if (!isSplash) { 
-    push();
-    textFont(chopsic);
-    fill(255);
-    textSize(20);
-    // Show the level we are currently on
-    if (onLevel == 0) {
-      text("Level: Free play", 720, 30);
-    } else {
-      text("Level: " + onLevel, 720, 30);
+  if (!isSplash) {
+    if (dist(circlePos.x+PAN.x, circlePos.y+PAN.y, player.pos.x, player.pos.y) < 100){
+      onLevel++
+      if (onLevel > maxLevel){
+        maxLevel = onLevel
+      }
+      initGame()
     }
+    push();
+    image(flag, flagPos.x - PAN.x, flagPos.y - PAN.y);
+    fill(255, 0, 0);
+    circle(circlePos.x, circlePos.y, 100);
     pop();
+    
     // Draw all the attractors and asteroids
     for (let i = 0; i < attractors.length; i++) {
       attractors[i].show();
@@ -146,7 +158,20 @@ function updateGame() {
     player.show();
     if (showMap) {
       displayMap();
+      
     }
+    
+    push();
+    textFont(chopsic);
+    fill(255);
+    textSize(20);
+    // Show the level we are currently on
+    if (onLevel == 0) {
+      text("Level: Free play", 720, 30);
+    } else {
+      text("Level: " + onLevel, 720, 30);
+    }
+    pop();
     // Draw the map
     drawButtons();
   } else {
@@ -162,8 +187,8 @@ function updateGame() {
         splashAttractors.splice(i, 1);
       }
     }
-    // Make a splash attractor with a 0.1% chance every frame
-    if (random(0, 1) < 0.001) {
+    // Make a splash attractor with a 0.2% chance every frame
+    if (random(0, 1) < 0.002) {
       splashAttractors.push(new Attractor(PAN.x + width + 100, random(0, height), floor(random(0, 4))));
     }
     // Scroll a bit

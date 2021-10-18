@@ -2,6 +2,7 @@
 const unselectedButtonColor = "#FFFFFF";
 const selectedButtonColor = "#1D9ECB";
 const hoverButtonColor = "#9bd9e8";
+const guideButtonColor = "#46faaf";
 
 // Buttons
 let runButton;
@@ -25,17 +26,21 @@ let bbhButton;
 let levelDropdown;
 let levelMenu = [];
 let showLevelsMenu = false;
+let buttonPoses = []
+
+let canPlace = false
 
 // Make all the buttons in the game
 function makeButtons() {
+  showLevelsMenu = false
   runButton = new Clickable();
   runButton.locate(10, 10);
   runButton.resize(100, 30);
   runButton.text = "Run (Enter)";
   runButton.onPress = function () {
-    if (guidePhase != 5 && showGuide){
-    }
-    else{
+    if (guidePhase != 5 && showGuide) {
+      // Do nothing
+    } else {
       showGuide = false;
       guidePhase = -5
       RUN = !RUN;
@@ -55,7 +60,7 @@ function makeButtons() {
   runButton.onOutside = function() {
     runButton.color = unselectedButtonColor;
     if (guidePhase == 5){
-      runButton.color = "#46faaf"
+      runButton.color = guideButtonColor;
     }
   }
   runButton.onRelease = function() {
@@ -96,8 +101,8 @@ function makeButtons() {
   }
   placeButton.onRelease = function() {
     placeButton.color = placeMode ? selectedButtonColor : unselectedButtonColor;
-    if (guidePhase == 0 && !placeMode){
-      placeButton.color = "#46faaf"
+    if (guidePhase == 0 && !placeMode) {
+      placeButton.color = guideButtonColor;
     }
   }
   placeButton.onOutside = placeButton.onRelease;
@@ -121,8 +126,8 @@ function makeButtons() {
   }
   moveButton.onRelease = function() {
     moveButton.color = moveMode ? selectedButtonColor : unselectedButtonColor;
-    if (guidePhase == 2){
-      moveButton.color = "#46faaf"
+    if (guidePhase == 2) {
+      moveButton.color = guideButtonColor;
     }
   }
   moveButton.onOutside = moveButton.onRelease;
@@ -145,8 +150,8 @@ function makeButtons() {
   }
   deleteButton.onRelease = function() {
     deleteButton.color = deleteMode ? selectedButtonColor : unselectedButtonColor;
-    if (guidePhase == 3){
-      deleteButton.color = "#46faaf"
+    if (guidePhase == 3) {
+      deleteButton.color = guideButtonColor;
     }
   }
   deleteButton.onOutside = deleteButton.onRelease
@@ -169,8 +174,8 @@ function makeButtons() {
   }
   selectButton.onRelease = function() {
     selectButton.color = selectionMode ? selectedButtonColor : unselectedButtonColor;
-    if (guidePhase == 4){
-      selectButton.color = "#46faaf"
+    if (guidePhase == 4) {
+      selectButton.color = guideButtonColor;
     }
   }
   selectButton.onOutside = selectButton.onRelease;
@@ -189,8 +194,8 @@ function makeButtons() {
   } 
   mapButton.onRelease = function() {
     mapButton.color = showMap ? selectedButtonColor : unselectedButtonColor;
-    if (guidePhase == 1){
-      mapButton.color = "#46faaf"
+    if (guidePhase == 1) {
+      mapButton.color = guideButtonColor;
     }
   }
   mapButton.onOutside = mapButton.onRelease;
@@ -301,9 +306,9 @@ function makeButtons() {
   splahScreenRun.onPress = function() {
     splahScreenRun.color = selectedButtonColor;
     isSplash = false;
-    showGuide = true
+    showGuide = false
     // PAN = createVector(0, height * 5 - height / 2);
-    PAN = createVector(0, 0);
+    PAN = createVector(0, 3402);
   }
   
   // Level dropdown button
@@ -315,6 +320,10 @@ function makeButtons() {
     if (!showGuide){
       levelDropdown.color = selectedButtonColor;
       showLevelsMenu = !showLevelsMenu
+      placeMode = false;
+      moveMode = false
+      selectionMode = false
+      deleteMode = false
     }
   }
   levelDropdown.onRelease = function() {
@@ -324,7 +333,8 @@ function makeButtons() {
   levelDropdown.onHover = function() {
     levelDropdown.color = showLevelsMenu ? selectedButtonColor : hoverButtonColor;
   }
-  levelMenu = []
+
+  levelMenu = [];
   let ind = 0;
   for (let x = 0; x < 2; x ++) {
     for (let y = 0; y < 7; y ++) {
@@ -385,7 +395,7 @@ function makeButtons() {
 
   // Help button
   helpButton = new Clickable();
-  helpButton.locate(width - 10 - 110, 70);
+  helpButton.locate(width - 10 - 110, 110);
   helpButton.resize(110, 30);
   helpButton.text = "Help";
   helpButton.onPress = function() {
@@ -417,7 +427,41 @@ function makeButtons() {
   speedButton.onHover = function() {
     speedButton.color = multiUpdate == 5 ? selectedButtonColor : hoverButtonColor;
   }
+
+  buttonPoses.push(createVector(runButton.x, runButton.y))
+
+  buttonPoses.push(createVector(placeButton.x, placeButton.y))
+  
+  buttonPoses.push(createVector(mapButton.x, mapButton.y))
+  
+  buttonPoses.push(createVector(moveButton.x, 
+  moveButton.y))
+  
+  buttonPoses.push(createVector(deleteButton.x, deleteButton.y))
+  
+  buttonPoses.push(createVector(selectButton.x, selectButton.y))
+  
+  buttonPoses.push(createVector(levelDropdown.x, levelDropdown.y))
+
+  buttonPoses.push(createVector(helpButton.x, helpButton.y))
+
+  buttonPoses.push(createVector(sunButton.x, sunButton.y))
+
+  buttonPoses.push(createVector(whButton.x, whButton.y))
+
+  buttonPoses.push(createVector(bbhButton.x, bbhButton.y))
+
+  buttonPoses.push(createVector(sbhButton.x, sbhButton.y))
+
 }
+
+function isMouseIn(x, y, w, h){
+  if (mouseX > x && mouseX < x+w && mouseY>y && mouseY<y+h){
+    return true
+  }
+  return false
+}
+
 
 function runLevel(i) {
   // Freeplay
@@ -425,9 +469,15 @@ function runLevel(i) {
     onLevel = 0;
     levelZero();
     attractors = []
-  } else if (i == 1) {
+  } 
+  else if (i == 1) {
     onLevel = 1;
     levelOne();
+    attractors = [];
+  }
+  else if (i == 2) {
+    onLevel = 2;
+    levelTwo();
     attractors = [];
   }
 }
@@ -438,6 +488,23 @@ function drawButtons() {
   mapButton.draw();
 
   // Only show the pause button if we are running the level
+  let toShow = true
+    for (let n=0;n<buttonPoses.length;n++){
+      let w = 110
+      let h = 60
+      if (n > 7){
+        w = 200
+        h = 100
+      }
+      if (isMouseIn(buttonPoses[n].x, buttonPoses[n].y, w, h)){
+        toShow = false
+      }
+      else{
+        
+      }
+  }
+  canPlace = toShow
+
   if (RUN) {
     pauseButton.draw();
     speedButton.draw()
@@ -471,10 +538,11 @@ function drawButtons() {
     bbhButton.draw();
 
     // Draw the currently selected celestial body at the mouse point if we are in place mode
-    if (mouseY < height - 100 && !showLevelsMenu && mouseY > 120) {
-      if (showGuide && dist(mouseX, mouseY, nextButton.x+55, nextButton.y+15) < 110){
-        return
-      }
+    
+    if (toShow) {
+      // if (showGuide && dist(mouseX, mouseY, nextButton.x+55, nextButton.y+15) < 110){
+      //   return
+      // }
       let m = 5
       if (!showMap) {
         if (choosingType == 0) {

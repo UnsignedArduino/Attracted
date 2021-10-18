@@ -18,6 +18,7 @@ function randomLevel() {
 function levelZero() {
   levelAsteroids = [];
   let level = [];
+  flagPos = createVector(-999999, -999999);
 }
 
 // Make level 1
@@ -44,4 +45,28 @@ function levelOne() {
   for (let i = 0; i < level.length; i ++) {
     levelAsteroids.push(createVector(level[i][0], level[i][1]));
   }
+  flagPos = createVector(width * 10 - 200, height * 5);
 }
+
+function levelTwo(){
+  let level = [];
+  levelAsteroids = []
+  let inc = 1
+  for (let x=width*3;x<width*7;x+=60) {
+    level.push([x, inc*inc+height*4]);
+    inc+=0.5
+  }
+  for (let x=width*3;x<width*7;x+=60) {
+    level.push([x, inc*inc+height*4]);
+    inc-=0.5
+  }
+  for (let i = 0; i < level.length; i ++) {
+    levelAsteroids.push(createVector(level[i][0], level[i][1]));
+  }
+  flagPos = createVector(width * 10 - 200, height * 5);
+}
+
+function levelThree(){
+  
+}
+

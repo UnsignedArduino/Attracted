@@ -8,7 +8,12 @@ function displayMap() {
   rect(0, 0, width, height);
   fill(255, 0, 0);
   let d = player.vel.copy();
-  drawArrow(p5.Vector.div(player.pos, scale), d.normalize().mult(10), 'blue');
+  if (!selectionMode){
+    drawArrow(p5.Vector.div(player.pos, scale), d.normalize().mult(10), 'blue');
+  }
+  else{
+    drawArrow(p5.Vector.div(player.pos, scale), d.normalize().mult(100), 'blue');
+  }
   circle(player.pos.x / scale, player.pos.y / scale, scale);
 
   for (let a of attractors) {
@@ -24,7 +29,10 @@ function displayMap() {
     if (a.type == 3) {
       fill(200, 200, 200);
     }
+    
     circle(a.pos.x / scale, a.pos.y / scale, a.currentR / scale);
+    fill(255, 0, 0)
+    circle(a.pos.x / scale, a.pos.y / scale, scale/3)
   }
   for (let a of levelAttractors) {
     if (a.type == 0) {
@@ -45,5 +53,7 @@ function displayMap() {
     fill(200, 200, 200)
     circle(a.x / scale, a.y / scale, 40/scale);
   }
+  fill(0, 255, 0);
+  circle((circlePos.x+PAN.x) / scale, (circlePos.y+PAN.y) / scale, scale);
   pop();
 }

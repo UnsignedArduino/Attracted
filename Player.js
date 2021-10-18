@@ -16,8 +16,7 @@ function drawArrow(base, vec, myColor) {
 class Player {
   constructor(x, y, m) {
     this.pos = createVector(x, y);
-    this.vel = p5.Vector.random2D();
-    this.vel.mult(0);
+    this.vel = createVector(0, 0);
     this.acc = createVector(0, 0);
     this.mass = m;
     this.r = sqrt(this.mass) * 2;

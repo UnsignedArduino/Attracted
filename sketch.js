@@ -10,16 +10,17 @@ function setup() {
   width = windowWidth - 15;
   height = windowHeight - 15;
   createCanvas(width, height);
-  launchVel = createVector();
+  launchVel = createVector(4, 0);
   // Make the background
   starBackground = makeBackground();
   frameRate(fps);
+  flagPos = createVector(-999999, -999999);
   initGame();
   // noCursor();
   // Only update the FPS display every second so we can actually read it
   setInterval(() => {
     fpsToShow = round(frameRate());
-  }, 1000);
+  }, 500);
 }
 
 function draw() {
@@ -70,8 +71,17 @@ function draw() {
   push();
   textAlign(RIGHT);
   fill(255);
-  text("Rocket speed: (" + round(player.vel.x) + ", " + round(player.vel.y) + ") px/frame",
+  text("Rocket speed: (" + round(player.vel.x * 100) / 100 + ", " + round(player.vel.y * 100) / 100 + ") px/frame",
     width - 10, 55);
+  pop();
+
+  //Write angle
+  push();
+  textAlign(RIGHT);
+  fill(255);
+  let zero = createVector(0.1, 0.1)
+  text("Rocket Angle: " + round((Math.atan2(player.vel.y, player.vel.x)*180/PI)*100)/100,
+    width - 10, 75);
   pop();
 }
 
@@ -82,7 +92,8 @@ function keyPressed() {
     splahScreenRun.color = selectedButtonColor;
     isSplash = false;
     // PAN = createVector(0, height * 5 - height / 2);
-    PAN = createVector(0, 0);
+    PAN = createVector(0, 3402);
+    
     return;
   }
   // Space
@@ -185,7 +196,7 @@ function mouseClicked() {
     return
   }
   // Don't do anything in this function if we are up near the buttons
-  if (mouseY < runButton.y + runButton.height) {
+  if (!canPlace) {
     return;
   }
 
@@ -198,23 +209,19 @@ function mouseClicked() {
       launchVel = p5.Vector.sub(m, p);
       launchVel.setMag(6);
       player.vel = launchVel.copy();
-    }
-    else{
+    } else {
       let p = player.pos.copy();
       p.sub(PAN)
       let m = createVector(mouseX, mouseY);
       launchVel = p5.Vector.sub(m, p);
-      launchVel.setMag(6);
+      launchVel.setMag(4);
       player.vel = launchVel.copy();
     }
   }
-  let p = true
-  if (showGuide && dist(mouseX, mouseY, nextButton.x+55, nextButton.y+15) < 110){
-    p = false
-  }
-  if (canModify && p) {
+  
+  if (canModify) {
     // Make new attractors if we are in place mode
-    if (placeMode && mouseY < height - 100 && !showLevelsMenu && mouseY > 120) {
+    if (placeMode) {
       if (!showMap) {
         attractors.push(new Attractor(mouseX + PAN.x, mouseY + PAN.y, choosingType));
       } else {

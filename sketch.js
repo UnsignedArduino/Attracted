@@ -17,7 +17,7 @@ function setup() {
   flagPos = createVector(-999999, -999999);
   initGame();
   // noCursor();
-  // Only update the FPS display every second so we can actually read it
+  // Only update the FPS display every half a second so we can actually read it
   setInterval(() => {
     fpsToShow = round(frameRate());
   }, 500);
@@ -92,7 +92,7 @@ function keyPressed() {
     splahScreenRun.color = selectedButtonColor;
     isSplash = false;
     // PAN = createVector(0, height * 5 - height / 2);
-    PAN = createVector(0, 3402);
+    PAN = createVector(0, height*5);
     
     return;
   }
@@ -141,8 +141,8 @@ function keyPressed() {
   // S
   if (keyCode == 83 && RUN) {
     // Toggle speed
-    multiUpdate = multiUpdate != 5 ? 5 : 1;
-    speedButton.color = multiUpdate == 5 ? selectedButtonColor : unselectedButtonColor;
+    multiUpdate = multiUpdate != multSpeed ? multSpeed : 1;
+    speedButton.color = multiUpdate == multSpeed ? selectedButtonColor : unselectedButtonColor;
   }
 
   if (canModify) {

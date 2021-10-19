@@ -14,7 +14,7 @@ function displayMap() {
   else{
     drawArrow(p5.Vector.div(player.pos, scale), d.normalize().mult(100), 'blue');
   }
-  circle(player.pos.x / scale, player.pos.y / scale, scale);
+  circle(player.pos.x / scale, player.pos.y / scale, 100/scale);
 
   for (let a of attractors) {
     if (a.type == 0) {
@@ -29,10 +29,36 @@ function displayMap() {
     if (a.type == 3) {
       fill(200, 200, 200);
     }
+    if (a.type == 4) {
+      fill(200, 0, 0);
+    }
+    if (a.type == 5) {
+      fill(0, 0, 255);
+    }
     
     circle(a.pos.x / scale, a.pos.y / scale, a.currentR / scale);
     fill(255, 0, 0)
     circle(a.pos.x / scale, a.pos.y / scale, scale/3)
+    let da = false
+    for (let i=0;i<attractors.length;i++){
+      if (attractors[i].type == 5){
+        let hit = collideLineCircle(a.pos.x/scale, a.pos.y/scale, player.pos.x/scale, player.pos.y/scale, attractors[i].pos.x/scale, attractors[i].pos.y/scale, attractors[i].currentR/scale)
+        if (hit){
+          da = true
+        }
+      }
+    }
+    
+    if (a.type != 5){
+      push()
+      stroke(255)
+      if (da){
+        stroke(255, 0, 0)
+      }
+      line(a.pos.x/scale, a.pos.y/scale, player.pos.x/scale, player.pos.y/scale)
+      pop()
+    }
+    
   }
   for (let a of levelAttractors) {
     if (a.type == 0) {
@@ -47,13 +73,34 @@ function displayMap() {
     if (a.type == 3) {
       fill(200, 200, 200);
     }
+    if (a.type == 5) {
+      fill(0, 0, 255);
+    }
     circle(a.pos.x / scale, a.pos.y / scale, a.currentR / (scale));
+    let da = false
+    for (let i=0;i<attractors.length;i++){
+      if (attractors[i].type == 5){
+        let hit = collideLineCircle(a.pos.x/scale, a.pos.y/scale, player.pos.x/scale, player.pos.y/scale, attractors[i].pos.x/scale, attractors[i].pos.y/scale, attractors[i].currentR/scale)
+        if (hit){
+          da = true
+        }
+      }
+    }
+    if (a.type != 5){
+      push()
+      stroke(255)
+      if (da){
+        stroke(255, 0, 0)
+      }
+      line(a.pos.x/scale, a.pos.y/scale, player.pos.x/scale, player.pos.y/scale)
+      pop()
+    }
   }
   for (let a of levelAsteroids) {
     fill(200, 200, 200)
     circle(a.x / scale, a.y / scale, 40/scale);
   }
   fill(0, 255, 0);
-  circle((circlePos.x+PAN.x) / scale, (circlePos.y+PAN.y) / scale, scale);
+  circle((circlePos.x+PAN.x) / scale, (circlePos.y+PAN.y) / scale, 300/scale);
   pop();
 }

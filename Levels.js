@@ -23,33 +23,24 @@ function levelZero() {
 
 // Make level 1
 function levelOne() {
-  levelAsteroids = [];
-  // let level = [
-  // [3570, 4850],
-  // [3790, 4630],
-  // [3970, 4400],
-  // [4210, 4130],
-  // [4480, 3920],
-  // [4730, 3720],
-  // [4920, 3560],
-  // [5110, 3380],
-  // [5360, 3200],
-  // [5600, 3000],
-  // [5780, 2860],
-  // [6020, 2730]
-  // ]
+  attractors = []
+  levelAttractors = []
+  levelAsteroids = []
+
   let level = [];
-  for (let i = height * 3; i < height * 7; i += 60) {
+  for (let i = height * 5; i < height * 6; i += 60) {
     level.push([width * 5, i]);
   }
   for (let i = 0; i < level.length; i ++) {
     levelAsteroids.push(createVector(level[i][0], level[i][1]));
   }
-  flagPos = createVector(width * 10 - 200, height * 5);
+  flagPos = createVector(width * 10 - 500, height * 5);
 }
 
 function levelTwo(){
   let level = [];
+  attractors = []
+  levelAttractors = []
   levelAsteroids = []
   let inc = 1
   for (let x=width*3;x<width*7;x+=60) {
@@ -67,6 +58,17 @@ function levelTwo(){
 }
 
 function levelThree(){
-  
+  flagPos = createVector(width * 10 - 500, height * 5);
+  attractors = []
+  levelAttractors = []
+  levelAsteroids = []
+
+  levelAttractors.push(new Attractor(width*5, height, 2))
+  levelAttractors.push(new Attractor(width*5, height*9, 2))
+  levelAttractors.push(new Attractor(width*5, height*5, 2))  
+
+  for (let i=0;i<levelAttractors.length;i++){
+    levelAttractors[i].unchangeable = true
+  }
 }
 

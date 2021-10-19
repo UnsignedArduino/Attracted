@@ -93,7 +93,7 @@ function initGame() {
 
 // Update the game
 function updateGame() {
-  circlePos = createVector(flagPos.x - PAN.x + 125, flagPos.y - PAN.y + 190)
+  circlePos = createVector(flagPos.x - PAN.x + 325, flagPos.y - PAN.y + 390)
 
   if (showGuide) {
     updateGuide();
@@ -133,11 +133,12 @@ function updateGame() {
         maxLevel = onLevel
       }
       initGame()
+      runLevel(onLevel)
     }
     push();
-    image(flag, flagPos.x - PAN.x, flagPos.y - PAN.y);
+    //image(flag, flagPos.x - PAN.x, flagPos.y - PAN.y);
     fill(255, 0, 0);
-    circle(circlePos.x, circlePos.y, 100);
+    circle(circlePos.x, circlePos.y, 200);
     pop();
     
     // Draw all the attractors and asteroids

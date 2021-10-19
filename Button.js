@@ -17,22 +17,28 @@ let deleteButton;
 let mapButton;
 let speedButton;
 
+let celestialObjectButtons = [];
 let sunButton;
 let whButton;
 let sbhButton;
 let bbhButton;
+let TONButton;
+let gravityBlocker
 
+let multSpeed = 5;
 
 let levelDropdown;
 let levelMenu = [];
 let showLevelsMenu = false;
-let buttonPoses = []
+let buttonPoses = [];
 
-let canPlace = false
+let canPlace = false;
+
+let alreadyMadeButtons = false;
 
 // Make all the buttons in the game
 function makeButtons() {
-  showLevelsMenu = false
+  showLevelsMenu = false;
   runButton = new Clickable();
   runButton.locate(10, 10);
   runButton.resize(100, 30);
@@ -229,6 +235,7 @@ function makeButtons() {
   whButton.locate(220, height - 110);
   whButton.resize(200, 100);
   whButton.text = "";
+  // whButton.text = "\n\n\nMass: -50";
   // whButton.text = "White Hole";
   whButton.image = WH2;
   whButton.fitImage = true;
@@ -291,6 +298,69 @@ function makeButtons() {
     bbhButton.color = choosingType == 2 ? selectedButtonColor : hoverButtonColor;
   }
 
+  TONButton = new Clickable();
+  TONButton.locate(850, height - 110);
+  TONButton.resize(200, 100);
+  TONButton.text = "TON 618";
+  // TONButton.image = bigBH;
+  // TONButton.fitImage = true;
+  // TONButton.imageScale = 0.6;
+  TONButton.textFont = chopsic;
+  TONButton.textSize = 15;
+  TONButton.onPress = function() {
+    choosingType = 4;
+    TONButton.color = selectedButtonColor;
+  }
+  TONButton.onRelease = function() {
+    TONButton.color = choosingType == 4 ? selectedButtonColor : unselectedButtonColor;
+  }
+  TONButton.onOutside = TONButton.onRelease;
+  TONButton.onHover = function() {
+    TONButton.color = choosingType == 4 ? selectedButtonColor : hoverButtonColor;
+  }
+
+  gravityBlocker = new Clickable();
+  gravityBlocker.locate(1060, height - 110);
+  gravityBlocker.resize(200, 100);
+  gravityBlocker.text = "Gravity Blocker";
+  // TONButton.image = bigBH;
+  // TONButton.fitImage = true;
+  // TONButton.imageScale = 0.6;
+  gravityBlocker.textFont = chopsic;
+  gravityBlocker.textSize = 15;
+  gravityBlocker.onPress = function() {
+    choosingType = 5;
+    gravityBlocker.color = selectedButtonColor;
+  }
+  gravityBlocker.onRelease = function() {
+    gravityBlocker.color = choosingType == 5 ? selectedButtonColor : unselectedButtonColor;
+  }
+  gravityBlocker.onOutside = gravityBlocker.onRelease;
+  gravityBlocker.onHover = function() {
+    gravityBlocker.color = choosingType == 5 ? selectedButtonColor : hoverButtonColor;
+  }
+
+  // Put them all in a list so we can iterate and place
+  celestialObjectButtons.push(sunButton);
+  celestialObjectButtons.push(whButton);
+  celestialObjectButtons.push(sbhButton);
+  celestialObjectButtons.push(bbhButton);
+  celestialObjectButtons.push(TONButton);
+  celestialObjectButtons.push(gravityBlocker);
+
+  if (!alreadyMadeButtons) {
+    let currX = 10;
+    let currY = height - 110;
+    let buttonWidth = round((width - 10 - (celestialObjectButtons.length * 10)) / celestialObjectButtons.length);
+    for (let index = 0; index < celestialObjectButtons.length; index ++) {
+      let celestialObjectButton = celestialObjectButtons[index];
+      celestialObjectButton.locate(currX, currY);
+      celestialObjectButton.resize(buttonWidth, 100);
+      currX += buttonWidth + 10;
+    }
+  }
+  alreadyMadeButtons = true;
+
   splahScreenRun = new Clickable();
   splahScreenRun.locate(width / 2 - 100, height - (height / 4));
   splahScreenRun.resize(200, 100);
@@ -308,7 +378,7 @@ function makeButtons() {
     isSplash = false;
     showGuide = false
     // PAN = createVector(0, height * 5 - height / 2);
-    PAN = createVector(0, 3402);
+    PAN = createVector(0, height*5);
   }
   
   // Level dropdown button
@@ -417,15 +487,15 @@ function makeButtons() {
   speedButton.resize(110, 30);
   speedButton.text = "x5 Speed (s)";
   speedButton.onPress = function () {
-    multiUpdate = multiUpdate != 5 ? 5 : 1;
-    speedButton.color = multiUpdate == 5 ? selectedButtonColor : unselectedButtonColor;
+    multiUpdate = multiUpdate != multSpeed ? multSpeed : 1;
+    speedButton.color = multiUpdate == multSpeed ? selectedButtonColor : unselectedButtonColor;
   } 
   speedButton.onRelease = function() {
-    speedButton.color = multiUpdate == 5 ? selectedButtonColor : unselectedButtonColor;
+    speedButton.color = multiUpdate == multSpeed ? selectedButtonColor : unselectedButtonColor;
   }
   speedButton.onOutside = speedButton.onRelease;
   speedButton.onHover = function() {
-    speedButton.color = multiUpdate == 5 ? selectedButtonColor : hoverButtonColor;
+    speedButton.color = multiUpdate == multSpeed ? selectedButtonColor : hoverButtonColor;
   }
 
   buttonPoses.push(createVector(runButton.x, runButton.y))
@@ -453,6 +523,10 @@ function makeButtons() {
 
   buttonPoses.push(createVector(sbhButton.x, sbhButton.y))
 
+  buttonPoses.push(createVector(TONButton.x, TONButton.y))
+  
+  buttonPoses.push(createVector(gravityBlocker.x, gravityBlocker.y))
+
 }
 
 function isMouseIn(x, y, w, h){
@@ -478,6 +552,11 @@ function runLevel(i) {
   else if (i == 2) {
     onLevel = 2;
     levelTwo();
+    attractors = [];
+  }
+  else if (i == 3) {
+    onLevel = 3;
+    levelThree();
     attractors = [];
   }
 }
@@ -520,7 +599,10 @@ function drawButtons() {
     levelDropdown.draw();
     // Draw all the buttons in the level select button
     if (showLevelsMenu) {
+      push()
+      fill(255)
       rect(590, 40, 200, 215);
+      pop()
       for (let i of levelMenu) {
         i.draw();
       }
@@ -536,6 +618,8 @@ function drawButtons() {
     whButton.draw();
     sbhButton.draw();
     bbhButton.draw();
+    TONButton.draw()
+    gravityBlocker.draw()
 
     // Draw the currently selected celestial body at the mouse point if we are in place mode
     
@@ -562,6 +646,20 @@ function drawButtons() {
           bigBH.resize(sqrt(20) * m * k, sqrt(20) * m * k);
           image(bigBH, mouseX - sqrt(20) * m * k / 2, mouseY - sqrt(20) * m * k / 2);
         }
+        else if (choosingType == 4) {
+          let k = 50;
+          // bigBH.resize(sqrt(20) * m * k, sqrt(20) * m * k);
+          // image(bigBH, mouseX - sqrt(20) * m * k / 2, mouseY - sqrt(20) * m * k / 2);
+          fill(255, 0, 0)
+          circle(mouseX, mouseY, sqrt(20) * m * k)
+        }
+        else if (choosingType == 5) {
+          let k = 7;
+          // bigBH.resize(sqrt(20) * m * k, sqrt(20) * m * k);
+          // image(bigBH, mouseX - sqrt(20) * m * k / 2, mouseY - sqrt(20) * m * k / 2);
+          fill(0, 0, 255)
+          circle(mouseX, mouseY, sqrt(20) * m * k)
+        }
       } else {
         let xs = sqrt(20) * m;
         if (choosingType == 0) {
@@ -584,6 +682,18 @@ function drawButtons() {
           fill(200, 200, 200);
           circle(mouseX, mouseY, xs * 7 / scale);
           pop();
+        }
+        else if (choosingType == 4) {
+          push()
+          fill(200, 0, 0)
+          circle(mouseX, mouseY, xs * 50 / scale)
+          pop()
+        }
+        else if (choosingType == 5) {
+          // bigBH.resize(sqrt(20) * m * k, sqrt(20) * m * k);
+          // image(bigBH, mouseX - sqrt(20) * m * k / 2, mouseY - sqrt(20) * m * k / 2);
+          fill(0, 0, 255)
+          circle(mouseX, mouseY, xs*7/scale)
         }
       }
     }

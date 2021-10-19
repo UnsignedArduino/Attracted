@@ -13,26 +13,25 @@ class Attractor {
   }
 
   attract(mover) {
-    let dontAttract = false
-    
+    if (this.type == 5){
+      return
+    }
+    let dontAttract = false;    
 
     let drawPos = this.pos.copy();
     drawPos.sub(PAN);
     let d = dist(this.pos.x, this.pos.y, mover.pos.x, mover.pos.y);
 
-
-
-    for (let i=0;i<attractors.length;i++){
-      if (attractors[i].type == 5){
-        let hit = collideLineCircle(drawPos.x, drawPos.y, mover.pos.x - PAN.x, mover.pos.y - PAN.y, attractors[i].pos.x-PAN.x, attractors[i].pos.y-PAN.y, attractors[i].currentR)
-        if (hit){
-          dontAttract = true
-        }
+    for (let i = 0; i < gravityBlockers.length; i ++) {
+      let hit = collideLineCircle(drawPos.x, drawPos.y, mover.pos.x - PAN.x, mover.pos.y - PAN.y, gravityBlockers[i].pos.x - PAN.x, gravityBlockers[i].pos.y - PAN.y, gravityBlockers[i].currentR);
+      if (hit) {
+        dontAttract = true;
       }
+      
     }
     
     // Draw a exclaimation mark on the mover if it is closer then 200 px
-    if (d <= 200) {
+    if (d <= 200 && !mover.fake) {
       push();
       fill(255, 0, 0);
       textSize(25);
@@ -42,7 +41,12 @@ class Attractor {
 
     // Reset the game if we are touching
     if (d < this.currentR / 2 && !dontAttract) {
-      initGame();
+      if (mover.fake){
+        return -3
+      }
+      else{
+        initGame();
+      }
       return;
     }
 
@@ -62,7 +66,7 @@ class Attractor {
     }
 
     // Draw debug lines (enable by pressing the d key)
-    if (showLines && d < (width + height)) {
+    if (showLines && d < (width + height) && !mover.fake) {
       push();
       stroke(255);
       if (dontAttract){

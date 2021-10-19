@@ -17,7 +17,8 @@ let launchVel;
 let levelAttractors = [];
 let levelAsteroids = [];
 let splashAttractors = [];
-let maxLevel = 3;
+let gravityBlockers = []
+let maxLevel = 10;
 let onLevel = 0;
 let multiUpdate = 1
 
@@ -91,6 +92,42 @@ function initGame() {
   //runLevel(onLevel)
 }
 
+// Shows the player preview (of where it would go)
+function showPreview() {
+  let allps = [];
+  let ogAcc = player.acc.copy();
+  let ogVel = player.vel.copy();
+  let ogPos = player.pos.copy();
+  let pCopy = new Player(ogPos.x, ogPos.y, player.mass);
+  pCopy.acc = ogAcc.copy();
+  pCopy.vel = ogVel.copy();
+  pCopy.pos = ogPos.copy();
+  pCopy.fake = true;
+  for (let n = 1; n < 500; n ++) { 
+    let ni = 1;
+    let ne = 1;
+    for (let i = 0; i < attractors.length; i ++) {
+      ni = attractors[i].attract(pCopy);
+    }
+    // Update the attractors already built-in to the level
+    for (let i = 0; i < levelAttractors.length; i ++) {
+      ne = levelAttractors[i].attract(pCopy);
+    }
+    if (ne == -3 || ni == -3) {
+      break;
+    } else {
+      pCopy.update();
+    }
+    
+    if (n % 20 == 0 && showLines) {
+      if (showMap) {
+        allps.push(pCopy.pos.copy().div(scale));
+      }
+    }
+  }
+  return allps;  
+}
+
 // Update the game
 function updateGame() {
   circlePos = createVector(flagPos.x - PAN.x + 325, flagPos.y - PAN.y + 390)
@@ -148,6 +185,9 @@ function updateGame() {
     for (let i = 0; i < levelAttractors.length; i++) {
       levelAttractors[i].show();
     }
+    for (let i = 0; i < gravityBlockers.length; i++) {
+      gravityBlockers[i].show();
+    }
     for (let i = 0; i < levelAsteroids.length; i++) {
       push();
       fill(200, 200, 200);
@@ -157,9 +197,16 @@ function updateGame() {
     
     // Show the player and maybe the map
     player.show();
+    
     if (showMap) {
       displayMap();
-      
+      let points = showPreview()
+      for (let i=0;i<points.length;i++){
+        push()
+        fill(255)
+        circle(points[i].x, points[i].y, 5)
+        pop()
+      }
     }
     
     push();

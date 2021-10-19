@@ -7,8 +7,8 @@ let dragging = false;
 let fpsToShow;
 
 function setup() {
-  width = windowWidth - 15;
-  height = windowHeight - 15;
+  // width = windowWidth - 15;
+  // height = windowHeight - 15;
   createCanvas(width, height);
   launchVel = createVector(4, 0);
   // Make the background
@@ -222,11 +222,22 @@ function mouseClicked() {
   if (canModify) {
     // Make new attractors if we are in place mode
     if (placeMode) {
+      
       if (!showMap) {
-        attractors.push(new Attractor(mouseX + PAN.x, mouseY + PAN.y, choosingType));
+        if (choosingType != 5){
+          attractors.push(new Attractor(mouseX + PAN.x, mouseY + PAN.y, choosingType));
+        }
+        else{
+          gravityBlockers.push(new Attractor(mouseX + PAN.x, mouseY + PAN.y, choosingType));
+        }
       } else {
         // Since we are in the zoomed out map, we place it at the scale
-        attractors.push(new Attractor(mouseX * scale, mouseY * scale, choosingType));
+        if (choosingType != 5){
+          attractors.push(new Attractor(mouseX*scale, mouseY*scale, choosingType));
+        }
+        else{
+          gravityBlockers.push(new Attractor(mouseX*scale, mouseY*scale, choosingType));
+        }
       }
     }
   }
@@ -240,10 +251,22 @@ function mouseClicked() {
           attractors.splice(index, 1);
         }
       }
+
+      for (index in gravityBlockers) {
+        // Use the scale cause we are in the zoomed-out map
+        if (dist(gravityBlockers[index].pos.x / scale, gravityBlockers[index].pos.y / scale, mouseX, mouseY) < gravityBlockers[index].currentR/scale) {
+          gravityBlockers.splice(index, 1);
+        }
+      }
     } else {
       for (index in attractors) {
         if (dist(attractors[index].pos.x-PAN.x, attractors[index].pos.y-PAN.y, mouseX, mouseY) < attractors[index].currentR) {
           attractors.splice(index, 1);
+        }
+      }
+      for (index in gravityBlockers) {
+        if (dist(gravityBlockers[index].pos.x-PAN.x, gravityBlockers[index].pos.y-PAN.y, mouseX, mouseY) < gravityBlockers[index].currentR) {
+          gravityBlockers.splice(index, 1);
         }
       }
     }

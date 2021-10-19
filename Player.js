@@ -20,6 +20,7 @@ class Player {
     this.acc = createVector(0, 0);
     this.mass = m;
     this.r = sqrt(this.mass) * 2;
+    this.fake = false
   }
 
   applyForce(force) {
@@ -34,7 +35,9 @@ class Player {
     this.acc.set(0, 0);
     // Reset the game if we go out of bounds
     if (this.pos.x > width * 10 || this.pos.x < -width || this.pos.y > height * 10 || this.pos.y < -height) {
-      initGame();
+      if (!this.fake){
+        initGame();
+      }
     }
   }
 

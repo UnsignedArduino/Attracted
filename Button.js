@@ -498,67 +498,46 @@ function makeButtons() {
     speedButton.color = multiUpdate == multSpeed ? selectedButtonColor : hoverButtonColor;
   }
 
-  buttonPoses.push(createVector(runButton.x, runButton.y))
-
-  buttonPoses.push(createVector(placeButton.x, placeButton.y))
-  
-  buttonPoses.push(createVector(mapButton.x, mapButton.y))
-  
-  buttonPoses.push(createVector(moveButton.x, 
-  moveButton.y))
-  
-  buttonPoses.push(createVector(deleteButton.x, deleteButton.y))
-  
-  buttonPoses.push(createVector(selectButton.x, selectButton.y))
-  
-  buttonPoses.push(createVector(levelDropdown.x, levelDropdown.y))
-
-  buttonPoses.push(createVector(helpButton.x, helpButton.y))
-
-  buttonPoses.push(createVector(sunButton.x, sunButton.y))
-
-  buttonPoses.push(createVector(whButton.x, whButton.y))
-
-  buttonPoses.push(createVector(bbhButton.x, bbhButton.y))
-
-  buttonPoses.push(createVector(sbhButton.x, sbhButton.y))
-
-  buttonPoses.push(createVector(TONButton.x, TONButton.y))
-  
-  buttonPoses.push(createVector(gravityBlocker.x, gravityBlocker.y))
 
 }
 
-function isMouseIn(x, y, w, h){
-  if (mouseX > x && mouseX < x+w && mouseY>y && mouseY<y+h){
-    return true
+function checkAllButtons() {
+  if (isMouseIn(runButton)) {
+    return true;
+  } else if(isMouseIn(placeButton)) {
+    return true;
+  } else if(isMouseIn(mapButton)) {
+    return true;
+  } else if(isMouseIn(moveButton)) {
+    return true;
+  } else if(isMouseIn(deleteButton)) {
+    return true;
+  } else if(isMouseIn(selectButton)) {
+    return true;
+  } else if(isMouseIn(levelDropdown)) {
+    return true;
+  } else if(isMouseIn(helpButton)) {
+    return true;
+  } else if(isMouseIn(sunButton)) {
+    return true;
+  } else if(isMouseIn(whButton)) {
+    return true;
+  } else if(isMouseIn(sbhButton)) {
+    return true;
+  } else if(isMouseIn(bbhButton)) {
+    return true;
+  } else if(isMouseIn(TONButton)) {
+    return true;
+  } else if(isMouseIn(gravityBlocker)) {
+    return true;
+  } else {
+    return false;
   }
-  return false
 }
 
-
-function runLevel(i) {
-  // Freeplay
-  if (i == 0) {
-    onLevel = 0;
-    levelZero();
-    attractors = []
-  } 
-  else if (i == 1) {
-    onLevel = 1;
-    levelOne();
-    attractors = [];
-  }
-  else if (i == 2) {
-    onLevel = 2;
-    levelTwo();
-    attractors = [];
-  }
-  else if (i == 3) {
-    onLevel = 3;
-    levelThree();
-    attractors = [];
-  }
+function isMouseIn(b) {
+  // Returns a boolean if we are in a button
+  return (mouseX > b.x && mouseX < b.x + b.width && mouseY > b.y && mouseY < b.y + b.height);
 }
 
 // Draw the buttons and update them if neccessary
@@ -568,20 +547,7 @@ function drawButtons() {
 
   // Only show the pause button if we are running the level
   let toShow = true
-    for (let n=0;n<buttonPoses.length;n++){
-      let w = 110
-      let h = 60
-      if (n > 7){
-        w = 200
-        h = 100
-      }
-      if (isMouseIn(buttonPoses[n].x, buttonPoses[n].y, w, h)){
-        toShow = false
-      }
-      else{
-        
-      }
-  }
+  toShow = !checkAllButtons()
   canPlace = toShow
 
   if (RUN) {

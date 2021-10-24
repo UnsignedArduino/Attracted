@@ -24,6 +24,8 @@ let sbhButton;
 let bbhButton;
 let TONButton;
 let gravityBlocker
+let debugLineButton;
+let clearLevel;
 
 let multSpeed = 5;
 
@@ -35,6 +37,13 @@ let buttonPoses = [];
 let canPlace = false;
 
 let alreadyMadeButtons = false;
+
+function undoMove() {
+  if (wasPreviousMove) {
+    console.log("Yes")
+    attractors[prevLoc[0]].pos = prevLoc[1].copy()
+  }
+}
 
 // Make all the buttons in the game
 function makeButtons() {
@@ -192,7 +201,7 @@ function makeButtons() {
   mapButton = new Clickable();
   mapButton.locate(10, 50);
   mapButton.resize(110, 30);
-  mapButton.text = "Open map (m)";
+  mapButton.text = "Map view (m)";
   mapButton.onPress = function () {
     showMap = !showMap;
     mapButton.text = showMap ? "Close map (m)" : "Open map (m)";
@@ -207,6 +216,38 @@ function makeButtons() {
   mapButton.onOutside = mapButton.onRelease;
   mapButton.onHover = function() {
     mapButton.color = showMap ? selectedButtonColor : hoverButtonColor;
+  }
+
+  debugLineButton = new Clickable();
+  debugLineButton.locate(10, 90);
+  debugLineButton.resize(110, 30);
+  debugLineButton.text = "Debug Lines (d)";
+  debugLineButton.onPress = function () {
+    showLines = !showLines;
+    debugLineButton.color = selectedButtonColor;
+  } 
+  debugLineButton.onRelease = function() {
+    debugLineButton.color = showLines ? selectedButtonColor : unselectedButtonColor;
+  }
+  debugLineButton.onOutside = debugLineButton.onRelease;
+  debugLineButton.onHover = function() {
+    debugLineButton.color = showLines ? selectedButtonColor : hoverButtonColor;
+  }
+
+  clearLevel = new Clickable();
+  clearLevel.locate(130, 50);
+  clearLevel.resize(110, 30);
+  clearLevel.text = "Clear Level";
+  clearLevel.onPress = function () {
+    attractors = []
+    gravityBlockers = []
+  } 
+  
+  clearLevel.onHover = function() {
+    clearLevel.color = hoverButtonColor;
+  }
+  clearLevel.onOutside = function() {
+    clearLevel.color = unselectedButtonColor;
   }
 
   sunButton = new Clickable();
@@ -387,13 +428,13 @@ function makeButtons() {
   levelDropdown.resize(110, 30);
   levelDropdown.text = "Levels (l)";
   levelDropdown.onPress = function () {
-    if (!showGuide){
+    if (!showGuide) {
       levelDropdown.color = selectedButtonColor;
-      showLevelsMenu = !showLevelsMenu
+      showLevelsMenu = !showLevelsMenu;
       placeMode = false;
-      moveMode = false
-      selectionMode = false
-      deleteMode = false
+      moveMode = false;
+      selectionMode = false;
+      deleteMode = false;
     }
   }
   levelDropdown.onRelease = function() {
@@ -530,6 +571,10 @@ function checkAllButtons() {
     return true;
   } else if(isMouseIn(gravityBlocker)) {
     return true;
+  } else if (isMouseIn(debugLineButton)){
+    return true
+  } else if (isMouseIn(clearLevel)){
+    return true
   } else {
     return false;
   }
@@ -544,6 +589,7 @@ function isMouseIn(b) {
 function drawButtons() {
   runButton.draw();
   mapButton.draw();
+  debugLineButton.draw()
 
   // Only show the pause button if we are running the level
   let toShow = true
@@ -553,6 +599,9 @@ function drawButtons() {
   if (RUN) {
     pauseButton.draw();
     speedButton.draw()
+  }
+  else{
+    clearLevel.draw()
   }
 
   pauseButton.text = paused ? "Resume (Space)" : "Pause (Space)";
@@ -586,7 +635,18 @@ function drawButtons() {
     bbhButton.draw();
     TONButton.draw()
     gravityBlocker.draw()
-
+    
+    push()
+    let X = TONButton.x+TONButton.width/2
+    let Y = TONButton.y+TONButton.height/2
+    fill(200, 0, 0)
+    circle(X, Y, 80)
+    stroke(0)
+    line(X-5, Y, X+5, Y)
+    fill(0)
+    circle(X-10, Y, 5)
+    circle(X+10, Y, 5)
+    pop()
     // Draw the currently selected celestial body at the mouse point if we are in place mode
     
     if (toShow) {
@@ -616,8 +676,15 @@ function drawButtons() {
           let k = 50;
           // bigBH.resize(sqrt(20) * m * k, sqrt(20) * m * k);
           // image(bigBH, mouseX - sqrt(20) * m * k / 2, mouseY - sqrt(20) * m * k / 2);
-          fill(255, 0, 0)
+          push()
+          fill(200, 0, 0)
           circle(mouseX, mouseY, sqrt(20) * m * k)
+          stroke(0)
+          line(mouseX-20, mouseY-20, mouseX+20, mouseY-20)
+          fill(0)
+          circle(mouseX-30, mouseY-20, 5)
+          circle(mouseX+30, mouseY-20, 5)
+          pop()
         }
         else if (choosingType == 5) {
           let k = 7;
@@ -653,6 +720,10 @@ function drawButtons() {
           push()
           fill(200, 0, 0)
           circle(mouseX, mouseY, xs * 50 / scale)
+          line((mouseX-20)/scale, (mouseY-20)/scale, (mouseX+20)/scale, (mouseY-20)/scale)
+          fill(0)
+          circle((mouseX-30)/scale, (mouseY-20)/scale, 5/scale)
+          circle((mouseX+30)/scale, (mouseY-20)/scale, 5/scale)
           pop()
         }
         else if (choosingType == 5) {
@@ -660,6 +731,7 @@ function drawButtons() {
           // image(bigBH, mouseX - sqrt(20) * m * k / 2, mouseY - sqrt(20) * m * k / 2);
           fill(0, 0, 255)
           circle(mouseX, mouseY, xs*7/scale)
+          
         }
       }
     }

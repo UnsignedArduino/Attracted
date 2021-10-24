@@ -1,4 +1,5 @@
 function runLevel(i) {
+  gravityBlockers = [];
   // Freeplay
   if (i == 0) {
     onLevel = 0;
@@ -20,25 +21,33 @@ function runLevel(i) {
     onLevel = 4;
     levelFour();
     attractors = [];
-  }
-  else if (i == 5) {
+  } else if (i == 5) {
     onLevel = 5;
     levelFive();
     attractors = [];
-  }
-  else if (i == 6) {
+  } else if (i == 6) {
     onLevel = 6;
     levelSix();
     attractors = [];
-  }
-  else if (i == 7) {
+  } else if (i == 7) {
     onLevel = 7;
     levelSeven();
     attractors = [];
-  }
-  else if (i == 8) {
+  } else if (i == 8) {
     onLevel = 8;
     levelEight();
+    attractors = [];
+  } else if (i == 9) {
+    onLevel = 9;
+    levelNine();
+    attractors = [];
+  } else if (i == 10) {
+    onLevel = 10;
+    levelTen();
+    attractors = [];
+  } else if (i == 11) {
+    onLevel = 11;
+    levelEleven();
     attractors = [];
   }
 }
@@ -67,16 +76,15 @@ function levelZero() {
   flagPos = createVector(-999999, -999999);
 }
 
-// Make level 1
 function levelOne() {
-  flagPos = createVector(width * 10 - 500, height * 5);
+  flagPos = createVector(W * 9.5, H * 4.5);
   attractors = []
   levelAttractors = []
   levelAsteroids = []
 
   let level = [];
-  for (let i = height * 5; i < height * 6; i += 60) {
-    level.push([width * 5, i]);
+  for (let i = H * 5; i < H * 5.5; i += 60) {
+    level.push([W * 5, i]);
   }
   for (let i = 0; i < level.length; i ++) {
     levelAsteroids.push(createVector(level[i][0], level[i][1]));
@@ -84,18 +92,18 @@ function levelOne() {
 }
 
 function levelTwo() {
-  flagPos = createVector(width * 10 - 500, height * 5);
+  flagPos = createVector(W * 9.5, H * 4.5);
   let level = [];
   attractors = [];
   levelAttractors = [];
   levelAsteroids = [];
   let inc = 1;
-  for (let x = width * 3; x < width * 7; x += 60) {
-    level.push([x, inc * inc + height * 4]);
+  for (let x = W * 3; x < W * 7; x += 60) {
+    level.push([x, inc * inc + H * 4]);
     inc += 0.5;
   }
-  for (let x = width * 3; x < width * 7; x += 60) {
-    level.push([x, inc * inc + height * 4]);
+  for (let x = W * 3; x < W * 7; x += 60) {
+    level.push([x, inc * inc + H * 4]);
     inc -= 0.5;
   }
   for (let i = 0; i < level.length; i ++) {
@@ -103,74 +111,209 @@ function levelTwo() {
   }
 }
 
-function levelThree(){
-  flagPos = createVector(width * 10 - 500, height * 5);
+function levelThree() {
+  flagPos = createVector(W * 9.5, H * 4.5);
   attractors = [];
   levelAttractors = [];
   levelAsteroids = [];
 
-  levelAttractors.push(new Attractor(width * 5, height, 2))
-  levelAttractors.push(new Attractor(width * 5, height * 9, 2))
-  levelAttractors.push(new Attractor(width * 5, height * 5, 2))  
+  levelAttractors.push(new Attractor(W * 5, H, 2))
+  levelAttractors.push(new Attractor(W * 5, H * 8, 2))
+  levelAttractors.push(new Attractor(W * 5, H * 5, 2))  
 
   for (let i = 0; i < levelAttractors.length; i ++) {
     levelAttractors[i].unchangeable = true;
-  }
-  
+  }  
 }
 
-
-function levelFour(){
-  flagPos = createVector(width * 10 - 500, height * 7);
-  attractors = []
-  levelAsteroids = []
-  levelAttractors = []
-  for (let x=0;x<width*5;x+=45){
-    levelAsteroids.push(createVector(x, height*8-1/4*x))
-    levelAsteroids.push(createVector(x, height*4-1/4*x))
+function levelFour() {
+  flagPos = createVector(W * 9.5, H * 4.5);
+  attractors = [];
+  levelAsteroids = [];
+  levelAttractors = [];
+  for (let x = 0; x < W * 5; x += 45) {
+    levelAsteroids.push(createVector(x, H * 8 - 1 / 4 * x));
+    levelAsteroids.push(createVector(x, H * 4 - 1 / 4 * x));
   }
-  for (let x=width*5;x<width*10;x+=45){
-    levelAsteroids.push(createVector(x, height*3.6+1/4*x))
-    levelAsteroids.push(createVector(x, -height*0.4+1/4*x))
+  for (let x = W * 5; x < W * 10; x += 45) {
+    levelAsteroids.push(createVector(x, H * 3.6 + 1 / 4 * x));
+    levelAsteroids.push(createVector(x, -H * 0.4 + 1 / 4 * x));
   }
 }
 
-function levelFive(){
-  flagPos = createVector(width * 10 - 500, height * 5);
+function levelFive() {
+  flagPos = createVector(W * 9.5, H * 4.5);
   attractors = [];
   levelAttractors = [];
   levelAsteroids = []; 
-  for (let x=-50;x<50;x+=0.5){
+  for (let x = -50; x < 50; x += 0.5) {
     levelAsteroids.push(createVector(
-      x*60+width*2,
-      -x*-60+height*2
-    ))
+      x * 60 + W * 2,
+      -x * -60 + H *2
+    ));
   }
-  for (let x=-50;x<50;x+=0.5){
+  for (let x =- 50; x < 50; x += 0.5) {
     levelAsteroids.push(createVector(
-      x*60+width*6,
-      -x*60+height*8
-    ))
+      x * 60 + W * 6,
+      -x * 60 + H * 8
+    ));
   }
 }
 
+function levelSix() {
+  flagPos = createVector(W * 9.5, H * 4.5);
+  attractors = [];
+  levelAttractors = [];
+  levelAsteroids = []; 
 
-function levelSix(){
- 
+  let a = 10;
+  let b = 10;
+  let r = 500;
+  let inc = 0.5;
+
+  for (let angle = 0; angle < 4 * PI; angle += inc) {
+    let ox = W * 5;
+    let oy = H * 5;
+    let X = ox;
+    let Y = oy + r;
+
+    let New_X = ox + (X - ox) * cos(angle) - (Y - oy) * sin(angle);
+    let New_Y = oy + (X - ox) * sin(angle) + (Y - oy) * cos(angle);
+    levelAsteroids.push(createVector(New_X, New_Y));
+  }
+  for (let angle = 0; angle < 4 * PI; angle += inc) {
+    let ox = W * 2;
+    let oy = H * 2;
+    let X = ox;
+    let Y = oy + r;
+
+    let New_X = ox + (X - ox) * cos(angle) - (Y - oy) * sin(angle);
+    let New_Y = oy + (X - ox) * sin(angle) + (Y - oy) * cos(angle);
+    levelAsteroids.push(createVector(New_X, New_Y));
+  }
+  for (let angle = 0; angle < 4 * PI; angle += inc) {
+    let ox = W * 8;
+    let oy = H * 6;
+    let X = ox;
+    let Y = oy + r;
+
+    let New_X = ox + (X - ox) * cos(angle) - (Y - oy) * sin(angle);
+    let New_Y = oy + (X - ox) * sin(angle) + (Y - oy) * cos(angle);
+    levelAsteroids.push(createVector(New_X, New_Y));
+  }
+  for (let angle = 0; angle < 4 * PI; angle += inc) {
+    let ox = W * 7.5;
+    let oy = H * 2;
+    let X = ox;
+    let Y = oy + r;
+
+    let New_X = ox + (X - ox) * cos(angle) - (Y - oy) * sin(angle);
+    let New_Y = oy + (X - ox) * sin(angle) + (Y - oy) * cos(angle);
+    levelAsteroids.push(createVector(New_X, New_Y));
+  }
+  for (let angle = 0; angle < 4 * PI; angle += 0.8) {
+    let ox = flagPos.x + r / 2 + 50;
+    let oy = flagPos.y + r / 2 + 50;
+    let X = ox;
+    let Y = oy + r;
+
+    let New_X = ox + (X - ox) * cos(angle) - (Y - oy) * sin(angle);
+    let New_Y = oy + (X - ox) * sin(angle) + (Y - oy) * cos(angle);
+    levelAsteroids.push(createVector(New_X, New_Y));
+  }  
 }
 
-function levelSeven(){
-  
+function levelSeven() {
+  flagPos = createVector(W * 9.5, H * 4.5);
+  attractors = [];
+  levelAttractors = [];
+  levelAsteroids = [];
+
+  for (let y = H * 3; y < H * 7; y += 200) {
+    levelAttractors.push(new Attractor(W * 5, y, 3));
+  }
 }
 
-function levelEight(){
-  
+function levelEight() {
+  flagPos = createVector(W * 9.5, H * 4.5);
+  attractors = [];
+  levelAttractors = [];
+  levelAsteroids = [];
+
+  for (let x = 0; x < 5000; x += 30) {
+    levelAsteroids.push(createVector(x + W * 3,
+                        x * (sin(x / 700)) + H * 7));
+  }
+  for (let x = 0; x < 3000; x += 30) {
+    levelAsteroids.push(createVector(x + W * 3,
+                        x * (sin(x / 700)) + H * 2));
+  }
 }
 
-function levelNine(){
-  
+function levelNine() {
+  flagPos = createVector(W * 9.5, H * 4.5);
+  attractors = [];
+  levelAttractors = [];
+  levelAsteroids = [];
+  let r = 2000;
+  for (let angle = 0; angle < 4 * PI; angle += 0.2) {
+    let ox = W * 5;
+    let oy = H * 5;
+    let X = ox;
+    let Y = oy + r;
+
+    let New_X = ox + (X - ox) * cos(angle) - (Y - oy) * sin(angle);
+    let New_Y = oy + (X - ox) * sin(angle) + (Y - oy) * cos(angle);
+    levelAsteroids.push(createVector(New_X, New_Y));
+  }
+  r = 100;
+  for (let angle = 0; angle < 4 * PI; angle += 0.8) {
+    let ox = W * 5 - 800;
+    let oy = H * 5 - 100;
+    let X = ox;
+    let Y = oy + r;
+
+    let New_X = ox + (X - ox) * cos(angle) - (Y - oy) * sin(angle);
+    let New_Y = oy + (X - ox) * sin(angle) + (Y - oy) * cos(angle);
+    levelAsteroids.push(createVector(New_X, New_Y));
+  }
+  for (let angle = 0; angle < 4 * PI; angle += 0.8) {
+    let ox = W * 5 + 800;
+    let oy = H * 5 - 100;
+    let X = ox;
+    let Y = oy + r;
+
+    let New_X = ox + (X - ox) * cos(angle) - (Y - oy) * sin(angle);
+    let New_Y = oy + (X - ox) * sin(angle) + (Y - oy) * cos(angle);
+    levelAsteroids.push(createVector(New_X, New_Y));
+  }
 }
 
-function levelTen(){
-  
+function levelTen() {
+  flagPos = createVector(W * 9.5, H * 4.5);
+  attractors = [];
+  levelAsteroids = [];
+  levelAttractors = [];
+  for (let x = 0; x < W * 5; x += 45) {
+    levelAsteroids.push(createVector(x, H * 8 - 1 / 4 * x));
+    levelAsteroids.push(createVector(x, H * 3.3 + 1 / 4 * x));
+  }
+  for (let x = W * 5; x < W * 10; x += 45) {
+    levelAsteroids.push(createVector(x, H * 3.6 + 1 / 4 * x));
+    levelAsteroids.push(createVector(x, H * 7.7 - 1 / 4 * x));
+  }
+}
+
+function levelEleven() {
+  flagPos = createVector(W * 6, H * 4.5);
+  attractors = [];
+  levelAsteroids = [];
+  levelAttractors = [];
+  for (let x = flagPos.x - 10 * 45; x < flagPos.x + 30 * 45; x += 45) {
+    levelAsteroids.push(createVector(x, H * 4));
+    levelAsteroids.push(createVector(x, H * 6));
+  }
+  for (let y = H * 4; y < H * 6; y += 45) {
+    levelAsteroids.push(createVector(flagPos.x - 10 * 45, y));
+  }
 }

@@ -18,9 +18,11 @@ let levelAttractors = [];
 let levelAsteroids = [];
 let splashAttractors = [];
 let gravityBlockers = []
-let maxLevel = 10;
+let maxLevel = 11;
 let onLevel = 0;
 let multiUpdate = 1
+let wasPreviousMove = false
+let prevLoc = []
 
 let isSplash = true
 
@@ -67,8 +69,8 @@ function logAllAttractors() {
 
 // Set up the game
 function initGame() {
+  prevLoc = [0, createVector(0, 0)]
   circlePos = createVector(0, 0);
-  
   multiUpdate = 1;
   splashAttractors = [];
   // Make a player and an attractor object
@@ -79,7 +81,7 @@ function initGame() {
   // attractors = [];
   choosingType = 0;
   PAN = createVector(0, 3402);
-  player = new Player(width / 2, height * 5, 5);
+  player = new Player(W / 2, H * 5, 5);
   RUN = false;
   placeMode = false;
   moveMode = false;
@@ -140,6 +142,7 @@ function updateGame() {
     if (!paused && RUN) {
       // Only updates and moves the player if not paused
       for (let i = 0; i < attractors.length; i++) {
+        attractors[i].myIndex = i
         attractors[i].attract(player);
       }
       // Update the attractors already built-in to the level

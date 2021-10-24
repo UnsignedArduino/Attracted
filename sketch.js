@@ -1,5 +1,7 @@
 let width = 1280;
 let height = 720;
+const H = height;
+const W = width;
 const fps = 60;
 
 let mouseHeld = false;
@@ -7,8 +9,8 @@ let dragging = false;
 let fpsToShow;
 
 function setup() {
-  // width = windowWidth - 15;
-  // height = windowHeight - 15;
+  width = windowWidth - 15;
+  height = windowHeight - 15;
   createCanvas(width, height);
   launchVel = createVector(4, 0);
   // Make the background
@@ -50,7 +52,7 @@ function draw() {
     fill(238, 144, 245)
     text("Gravity. The most attractive force in the universe", width / 2, height / 4 + 30)
     fill(192);
-    text("A game made by Bobingstern and UnsignedArduino\nFor the repl.it 2021 game jam\n", 
+    text("A game made by Bobingstern and UnsignedArduino\nFor the repl.it 2021 game jam", 
          width / 2, height / 4 + 60);
     text("Press any key to begin", 
          splahScreenRun.x + (splahScreenRun.width / 2), 
@@ -75,7 +77,7 @@ function draw() {
     width - 10, 55);
   pop();
 
-  //Write angle
+  // Write angle
   push();
   textAlign(RIGHT);
   fill(255);
@@ -92,10 +94,10 @@ function keyPressed() {
     splahScreenRun.color = selectedButtonColor;
     isSplash = false;
     // PAN = createVector(0, height * 5 - height / 2);
-    PAN = createVector(0, height*5);
-    
+    PAN = createVector(0, height*5);  
     return;
   }
+
   // Space
   if (RUN && keyCode == 32) { 
     // Pause the game
@@ -192,11 +194,7 @@ function mouseReleased() {
 }
 
 function mouseClicked() {
-  if (isSplash){
-    return
-  }
-  // Don't do anything in this function if we are up near the buttons
-  if (!canPlace) {
+  if (isSplash || (!canPlace)) {
     return;
   }
 
@@ -222,7 +220,7 @@ function mouseClicked() {
   if (canModify) {
     // Make new attractors if we are in place mode
     if (placeMode) {
-      
+      wasPreviousMove = false
       if (!showMap) {
         if (choosingType != 5){
           attractors.push(new Attractor(mouseX + PAN.x, mouseY + PAN.y, choosingType));
@@ -260,12 +258,12 @@ function mouseClicked() {
       }
     } else {
       for (index in attractors) {
-        if (dist(attractors[index].pos.x-PAN.x, attractors[index].pos.y-PAN.y, mouseX, mouseY) < attractors[index].currentR) {
+        if (dist(attractors[index].pos.x - PAN.x, attractors[index].pos.y - PAN.y, mouseX, mouseY) < attractors[index].currentR) {
           attractors.splice(index, 1);
         }
       }
       for (index in gravityBlockers) {
-        if (dist(gravityBlockers[index].pos.x-PAN.x, gravityBlockers[index].pos.y-PAN.y, mouseX, mouseY) < gravityBlockers[index].currentR) {
+        if (dist(gravityBlockers[index].pos.x - PAN.x, gravityBlockers[index].pos.y - PAN.y, mouseX, mouseY) < gravityBlockers[index].currentR) {
           gravityBlockers.splice(index, 1);
         }
       }

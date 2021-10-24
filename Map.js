@@ -2,6 +2,7 @@ let scale = 10;
 
 // Draws the zoom-ed out map
 function displayMap() {
+  scale = 20000/(width+height)
   push();
   stroke(0);
   fill(100, 100, 100);

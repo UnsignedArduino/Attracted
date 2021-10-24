@@ -10,6 +10,9 @@ class Attractor {
     this.currentR = this.r;
     this.draggingMe = false;
     this.unchangeable = false
+    this.flipped = false
+    this.myIndex = 0
+    this.dragBegun = false
   }
 
   attract(mover) {
@@ -140,10 +143,16 @@ class Attractor {
       push();
       translate(this.pos.x, this.pos.y);
       rotate(this.angle);
-      fill(255, 0, 0)
+      fill(200, 0, 0)
+      
       //WH.resize(this.r * k, this.r * k);
       //image(WH, -this.r * k / 2, -this.r * k / 2);
       circle(0, 0, this.r*k)
+      stroke(0)
+      line(-20, -20, 20, -20)
+      fill(0)
+      circle(-30, -20, 5)
+      circle(30, -20, 5)
       pop();
     }
     else if (this.type == 5) {
@@ -162,6 +171,25 @@ class Attractor {
     // Do dragging stuff
     this.currentR = this.r * k;
     this.pos = temp.copy();
+
+    if (this.draggingMe){
+        this.flipped = true
+      }
+      else if (this.flipped){
+        this.flipped = false
+        wasPreviousMove = true
+      }
+
+      if (!this.draggingMe){
+        this.dragBegun = true
+      }
+      else if (this.dragBegun){
+        this.dragBegun = false
+        prevLoc = [this.myIndex, this.pos]
+      }
+    console.log()
+
+
     if (!this.unchangeable){
       
       
@@ -199,6 +227,8 @@ class Attractor {
           dragging = false;
         }
       }
+
+      
     }
   }
 }

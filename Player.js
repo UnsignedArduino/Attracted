@@ -34,7 +34,7 @@ class Player {
     this.pos.add(this.vel);
     this.acc.set(0, 0);
     // Reset the game if we go out of bounds
-    if (this.pos.x > width * 10 || this.pos.x < -width || this.pos.y > height * 10 || this.pos.y < -height) {
+    if (this.pos.x > W * 11 || this.pos.x < -W || this.pos.y > H * 11 || this.pos.y < -H) {
       if (!this.fake){
         initGame();
       }

@@ -1,55 +1,40 @@
 function runLevel(i) {
-  gravityBlockers = [];
-  // Freeplay
   if (i == 0) {
-    onLevel = 0;
+    // Freeplay
     levelZero();
-    attractors = [];
   } else if (i == 1) {
-    onLevel = 1;
     levelOne();
-    attractors = [];
   } else if (i == 2) {
-    onLevel = 2;
     levelTwo();
-    attractors = [];
   } else if (i == 3) {
-    onLevel = 3;
     levelThree();
-    attractors = [];
   } else if (i == 4) {
-    onLevel = 4;
     levelFour();
-    attractors = [];
   } else if (i == 5) {
-    onLevel = 5;
     levelFive();
-    attractors = [];
   } else if (i == 6) {
-    onLevel = 6;
     levelSix();
-    attractors = [];
   } else if (i == 7) {
-    onLevel = 7;
     levelSeven();
-    attractors = [];
   } else if (i == 8) {
-    onLevel = 8;
     levelEight();
-    attractors = [];
   } else if (i == 9) {
-    onLevel = 9;
     levelNine();
-    attractors = [];
   } else if (i == 10) {
-    onLevel = 10;
     levelTen();
-    attractors = [];
   } else if (i == 11) {
-    onLevel = 11;
     levelEleven();
-    attractors = [];
+  } else if (i == 12) {
+    levelTwelve();
+  } else if (i == 13) {
+    levelThirteen();
+  } else {
+    // Not even a real level
+    return;
   }
+  onLevel = i;
+  attractors = [];
+  gravityBlockers = [];
 }
 
 // Fill the map with asteroids
@@ -123,7 +108,7 @@ function levelThree() {
 
   for (let i = 0; i < levelAttractors.length; i ++) {
     levelAttractors[i].unchangeable = true;
-  }  
+  }
 }
 
 function levelFour() {
@@ -315,5 +300,33 @@ function levelEleven() {
   }
   for (let y = H * 4; y < H * 6; y += 45) {
     levelAsteroids.push(createVector(flagPos.x - 10 * 45, y));
+  }
+}
+
+function levelTwelve() {
+  flagPos = createVector(W * 9.5, H * 4.5);
+  attractors = [];
+  levelAsteroids = [];
+  levelAttractors = [];
+  levelAttractors.push(new Attractor(W * 5, H * 5, 4));
+  levelAttractors[0].unchangeable = true;
+}
+
+function levelThirteen() {
+  flagPos = createVector(W * 9.5, H * 4.5);
+  attractors = [];
+  levelAsteroids = [];
+  levelAttractors = [];
+  for (let y = H * 0; y < H * 8; y += 45) {
+    levelAsteroids.push(createVector(W * 2, y));
+  }
+  for (let y = H * 2; y < H * 10; y += 45) {
+    levelAsteroids.push(createVector(W * 4, y));
+  }
+  for (let y = H * 0; y < H * 8; y += 45) {
+    levelAsteroids.push(createVector(W * 6, y));
+  }
+  for (let y = H * 2; y < H * 10; y += 45) {
+    levelAsteroids.push(createVector(W * 8, y));
   }
 }
